@@ -1,0 +1,48 @@
+﻿@page "/CreateGroup"
+@model LibellusWeb.Pages.Group.CreateGroupModel
+@{
+    ViewData["Title"] = "Create group";
+}
+
+<div class="row d-flex align-items-center justify-content-center">
+    <div class="col-md-6">
+        <h2>Create a new group.</h2>
+        <hr/>
+        <section>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <form class="form-floating" id="group" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Name" type="text" class="form-control" placeholder="Group name">
+                    <label asp-for="Input.Name">Group name</label>
+                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea asp-for="Input.Description" class="form-control" placeholder="Write the description here." style="height: 200px"></textarea>
+                    <label asp-for="Input.Description">Description (Optional)</label>
+                    <span asp-validation-for="Input.Description" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsPrivate" class="form-check-label">
+                        <input asp-for="Input.IsPrivate" class="form-check-input" checked/>
+                        Is private group?
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.CreateWithDefaultValues" class="form-check-label">
+                        <input asp-for="Input.CreateWithDefaultValues" class="form-check-input" checked/>
+                        Create With default values?
+                    </label>
+                </div>
+
+                <div>
+                    <button id="create-group-submit" type="submit" class="w-100 btn btn-lg btn-primary">Create group</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

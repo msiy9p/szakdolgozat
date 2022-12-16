@@ -1,0 +1,110 @@
+﻿@page "/Group/{gid:groupid}/Post/{pid:postid}/EditPost/{handler?}"
+@using Libellus.Application.Common.Interfaces.Services
+@using Microsoft.AspNetCore.Html
+@inject IHtmlSanitizer HtmlSanitizer
+@model LibellusWeb.Pages.Group.Post.EditPostModel
+@{
+    ViewData["Title"] = "Edit post";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-6 align-items-center justify-content-center">
+        <h2>Edit post.</h2>
+        <hr/>
+        <section>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <form class="form-floating" id="post" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input disabled readonly id="posttitle" type="text" class="form-control" value="@Model.Title" placeholder="Post title">
+                    <label for="posttitle">Post title</label>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsSpoiler" class="form-check-label">
+                        <input asp-for="Input.IsSpoiler" class="form-check-input"/>
+                        Contains spoilers?
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsMemberOnly" class="form-check-label">
+                        <input asp-for="Input.IsMemberOnly" class="form-check-input" checked/>
+                        Only visible to group members?
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <select asp-for="Input.Label" asp-items="new SelectList(Model.Labels)" class="form-select" aria-label="Default select example"></select>
+                </div>
+                <div class="form-floating mb-3">
+                    @{
+                        var htmlString = new HtmlString(HtmlSanitizer.Sanitize(Model.Input.Text));
+                    }
+
+                    @{
+                        if (Model.IsLocked)
+                        {
+                            <textarea disabled readonly id="Input_Text" name="Input.Text" class="form-control" placeholder="Comment text" style="height: 200px">@htmlString</textarea>
+
+                        }
+                        else
+                        {
+                            <textarea id="Input_Text" name="Input.Text" class="form-control" placeholder="Comment text" style="height: 200px">@htmlString</textarea>
+                        }
+                    }
+
+                    <label asp-for="Input.Text">Post text</label>
+                    <span asp-validation-for="Input.Text" class="text-danger"></span>
+                </div>
+
+                <div class="mb-2">
+                    @{
+                        var postLock = new Dictionary<string, string>
+                        {
+                            { "gid", Model.GroupId },
+                            { "pid", Model.PostId },
+                        };
+                    }
+                    <a asp-page="/Group/Post/LockPost" asp-all-route-data="postLock"><button type="button" class="w-100 btn btn-lg btn-outline-warning">Lock/Unlock post</button></a>
+                </div>
+
+                @{
+                    if (Model.IsLocked)
+                    {
+                        <div>
+                            <button disabled id="edit-post-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit post <small class="text-muted"><i>(Post is locked)</i></small></button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <button id="edit-post-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit post</button>
+                        </div>
+                    }
+                }
+
+            </form>
+            <form asp-page-handler="delete" class="form-floating" id="comment-delete" method="post">
+
+                <div>
+                    <button id="delte-post-submit" type="submit" class="mt-2 w-100 btn btn-lg btn-danger">Delete post</button>
+                </div>
+
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/lib/tinymce/tinymce.min.js" asp-append-version="true" referrerpolicy="origin"></script>
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea#Input_Text'
+        });
+    </script>
+}

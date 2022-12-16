@@ -1,0 +1,44 @@
+﻿@page
+@using Libellus.Domain.Enums
+@model LibellusWeb.Pages.Account.InvitationsModel
+@{
+    ViewData["Title"] = "Invitations";
+    ViewData["ActivePage"] = ManageNavPages.Invitations;
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <section>
+            <h5>Pending invitations.</h5>
+            
+            <div class="container">
+                <ol class="list-group list-group-numbered list-group-flush">
+                    @{
+                        foreach (var invitation in Model.Invitations)
+                        {
+                            <li class="list-group-item">
+                                <form method="post">
+                                    <span class="p-1 badge bigger-badge rounded-pill text-bg-light">@invitation.GroupName.Value</span>
+                                    <span class="p-1 badge bigger-badge rounded-pill text-bg-warning">@InvitationStatusExtensions.ToString(invitation.InvitationStatus)</span>
+
+                                    <input type="hidden" asp-for="Input.InvitationId" value="@invitation.InvitationId.ToString()"/>
+                                    <input class="btn btn-primary mb-3" type="submit" value="Accept" asp-page-handler="Accept"/>
+                                    <input class="btn btn-danger mb-3" type="submit" value="Decline" asp-page-handler="Decline"/>
+                                </form>
+                            </li>
+                        }
+                    }
+                </ol>
+            </div>
+
+        </section>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

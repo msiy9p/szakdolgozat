@@ -1,0 +1,99 @@
+﻿@page "/Group/{gid:groupid}/Reading/{rid:readingid}"
+@using LibellusWeb.Models
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Html
+@using Libellus.Application.Common.Interfaces.Services
+@inject IHtmlSanitizer HtmlSanitizer
+@model LibellusWeb.Pages.Group.Reading.ReadingModel
+@{
+    ViewData["Title"] = @Model.BookEdition.Title.Value;
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId"/>
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+        <h2>Reading</h2>
+        <hr />
+
+        <partial name="Group/BookEdition/_BookEditionVmPartial" model="new BookEditionVm(Model.BookEdition, Model.GroupId, Model.CoverLinkBase, true)" />
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+        
+        <hr />
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <partial name="_ReadingVmTableRowHeaderPartial"/>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <partial name="_ReadingVmTableRowPartial" model="new ReadingVm(Model.Reading, Model.GroupId, Model.ProfileLinkBase, true)"/>
+            </tr>
+        </table>
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+
+        @{
+            if (Model.Reading.Note is not null)
+            {
+                <div class="card border border-secondary">
+                    <div class="card-header container">
+                        <div class="row">
+                            <div class="col-sm-2 align-self-center">
+                                <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.ProfileLinkBase, Model.Reading.Note.Creator?.AvailableProfilePictures)"/>
+                            </div>
+                            @{
+                                var commenter = Model.Reading.Note.Creator is not null ? Model.Reading.Note.Creator.UserName : "[deleted]";
+                            }
+                            <div class="col-sm-auto align-self-center">@commenter</div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        @{
+                            var htmlString = new HtmlString(HtmlSanitizer.Sanitize(Model.Reading.Note.Text.Value));
+                        }
+                        <p class="card-text">@htmlString</p>
+                    </div>
+                    <div class="card-footer container text-center">
+                        <div class="row">
+                            <div class="col-sm">
+                                @{
+                                    var datePrefix = Model.Reading.Note.CreatedOnUtc == Model.Reading.Note.ModifiedOnUtc ?
+                                        "Created on" :
+                                        "Modified on";
+
+                                    var dateProper = Model.Reading.Note.CreatedOnUtc == Model.Reading.Note.ModifiedOnUtc ?
+                                        Model.Reading.Note.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+                                        Model.Reading.Note.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+                                }
+
+                                <small class="text-muted align-self-center">
+                                    @datePrefix <span class="datetimerewrite">@dateProper</span>
+                                </small>
+                            </div>
+                            
+                            @{
+                                var readingEdit = new Dictionary<string, string>
+                                {
+                                    { "gid", Model.GroupId },
+                                    { "rid", Model.ReadingId},
+                                };
+                            }
+
+                            <div class="col-sm">
+                                <a asp-page="/Group/Reading/EditReading" asp-all-route-data="readingEdit" class="btn btn-warning">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+</div>

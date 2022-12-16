@@ -1,0 +1,12 @@
+﻿@model LibellusWeb.Models.CoverImage
+
+@{
+    if (Model.HasItems)
+    {
+        <img class="border rounded" width="@Model.SizeWidth" height="auto" srcset="@Model.GetSrcSet()" sizes="@Model.GetSizes()" src="@Model.GetSrc()" alt="@Model.GetAltText()" />
+    }
+    else
+    {
+        <img class="border rounded" width="@Model.SizeWidth" height="auto" alt="Cover image placeholder." aria-label="Cover image placeholder." type="image/svg+xml" src="~/lib/bootstrap-icons/book-half.svg" />
+    }
+}

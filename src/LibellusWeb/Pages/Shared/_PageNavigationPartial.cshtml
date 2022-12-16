@@ -1,0 +1,27 @@
+﻿@model List<LibellusWeb.Models.PageNavigation>
+
+<nav class="mt-5" aria-label="Page navigatione">
+    <ul class="pagination justify-content-center">
+        @foreach (var item in Model)
+        {
+            if (item.IsCurrent)
+            {
+                <li class="page-item active">
+                    <span class="page-link">@item.DisplayText</span>
+                </li>
+            }
+            else if (item.IsDisabled)
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">@item.DisplayText</span>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@item.Url">@item.DisplayText</a>
+                </li>
+            }
+        }
+    </ul>
+</nav>

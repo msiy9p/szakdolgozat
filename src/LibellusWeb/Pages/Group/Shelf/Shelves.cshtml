@@ -1,0 +1,46 @@
+﻿@page "/Group/{gid:groupid}/Shelves/{size:int=25}/{location:min(1)=1}"
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.Shelf.ShelvesModel
+@{
+    ViewData["Title"] = "Shelves";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+        @{
+            var createRoute = new Dictionary<string, string>
+        {
+            { "gid", Model.GroupId },
+        };
+        }
+        <div class="d-flex justify-content-between">
+            <h2>Shelves.</h2><a asp-page="/Group/Shelf/CreateShelf" asp-all-route-data="createRoute"><button class="btn btn-outline-success btn-sm" type="button">Create new shelf</button></a>
+        </div>
+
+        <partial name="_SearchPartial" model="string.Empty" />
+        <hr />
+        @{
+            var index = 0;
+            foreach (var shelf in Model.Shelves)
+            {
+                <partial name="_ShelfVmPartial" model="new ShelfVm(shelf, Model.GroupId, shelf.FriendlyId.Value)" />
+
+                if (index < Model.Shelves.Count)
+                {
+                    <partial name="Shared/_TopMarginGapPartial" />
+                }
+
+                index++;
+            }
+
+            <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations" />
+        }
+
+    </div>
+
+</div>

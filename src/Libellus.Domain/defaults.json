@@ -1,0 +1,253 @@
+{
+  "Formats": {
+    "Items": [
+      {
+        "IsDigital": true,
+        "Name": "E-book"
+      },
+      {
+        "IsDigital": false,
+        "Name": "Paperback"
+      },
+      {
+        "IsDigital": false,
+        "Name": "Hardcover"
+      },
+      {
+        "IsDigital": false,
+        "Name": "Leatherbound"
+      }
+    ]
+  },
+  "Genres": {
+    "Items": [
+      {
+        "IsFiction": true,
+        "Name": "Action"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Adventure"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Alternate History"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Crime"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Dystopian"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Fairytale"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Fantasy"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Historical Fiction"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Horror"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Mystery"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Romance"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Slice of Life"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Thriller"
+      },
+      {
+        "IsFiction": true,
+        "Name": "Urban Fantasy"
+      },
+      {
+        "IsFiction": false,
+        "Name": "Art"
+      },
+      {
+        "IsFiction": false,
+        "Name": "Autobiography"
+      },
+      {
+        "IsFiction": false,
+        "Name": "Biography"
+      },
+      {
+        "IsFiction": false,
+        "Name": "Food & Drink"
+      },
+      {
+        "IsFiction": false,
+        "Name": "History"
+      },
+      {
+        "IsFiction": false,
+        "Name": "Philosophy"
+      },
+      {
+        "IsFiction": false,
+        "Name": "Travel"
+      },
+      {
+        "IsFiction": false,
+        "Name": "True Crime"
+      }
+    ]
+  },
+  "Labels": {
+    "Items": [
+      {
+        "Name": "Discussion"
+      },
+      {
+        "Name": "News"
+      },
+      {
+        "Name": "Review"
+      }
+    ]
+  },
+  "Languages": {
+    "Items": [
+      {
+        "Name": "English"
+      },
+      {
+        "Name": "German"
+      },
+      {
+        "Name": "French"
+      },
+      {
+        "Name": "Spanish"
+      },
+      {
+        "Name": "Italian"
+      },
+      {
+        "Name": "Hungarian"
+      }
+    ]
+  },
+  "LiteratureForms": {
+    "Items": [
+      {
+        "Name": "Poetry",
+        "ScoreMultiplier": 0.5
+      },
+      {
+        "Name": "Novel",
+        "ScoreMultiplier": 1.8
+      },
+      {
+        "Name": "Comics",
+        "ScoreMultiplier": 0.5
+      },
+      {
+        "Name": "Novella",
+        "ScoreMultiplier": 1.5
+      },
+      {
+        "Name": "Short Story",
+        "ScoreMultiplier": 1
+      }
+    ]
+  },
+  "Tags": {
+    "Items": [
+      {
+        "Name": "Male Protagonist"
+      },
+      {
+        "Name": "Female Protagonist"
+      },
+      {
+        "Name": "Aliens"
+      },
+      {
+        "Name": "Urban"
+      },
+      {
+        "Name": "LGBTQ+"
+      },
+      {
+        "Name": "Dark"
+      },
+      {
+        "Name": "Adult"
+      },
+      {
+        "Name": "Young Adult"
+      },
+      {
+        "Name": "Medieval"
+      },
+      {
+        "Name": "Epic"
+      },
+      {
+        "Name": "Soft magic"
+      },
+      {
+        "Name": "Hard magic"
+      },
+      {
+        "Name": "Magic"
+      },
+      {
+        "Name": "Cozy"
+      },
+      {
+        "Name": "Slice of Life"
+      },
+      {
+        "Name": "Superhero"
+      },
+      {
+        "Name": "Cyberpunk"
+      },
+      {
+        "Name": "Time Travel"
+      },
+      {
+        "Name": "Standalone"
+      }
+    ]
+  },
+  "WarningTags": {
+    "Items": [
+      {
+        "Name": "Violence"
+      },
+      {
+        "Name": "Abuse"
+      },
+      {
+        "Name": "Gore"
+      },
+      {
+        "Name": "Torture"
+      },
+      {
+        "Name": "Drugs"
+      }
+    ]
+  }
+}

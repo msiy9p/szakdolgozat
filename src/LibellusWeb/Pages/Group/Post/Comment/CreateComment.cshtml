@@ -1,0 +1,73 @@
+﻿@page "/Group/{gid:groupid}/Post/{pid:postid}/CreateComment"
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.Post.Comment.CreateCommentModel
+@{
+    ViewData["Title"] = "New comment";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+        <h2>Create a new comment.</h2>
+        <hr/>
+        <section>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <partial name="Group/Post/_PostVmPartial" model="new PostVm(Model.Post, Model.GroupId, Model.PostId, Model.LinkBase, false, false, true)"/>
+
+            <partial name="Shared/_TopMarginGapPartial"/>
+
+            <div class="container">
+                <form class="form-floating" id="comment" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-3">
+
+                        @{
+                            if (Model.Post.IsLocked)
+                            {
+                                <textarea disabled readonly asp-for="Input.Text" class="form-control" placeholder="Comment text" style="height: 200px"></textarea>
+                            }
+                            else
+                            {
+                                <textarea asp-for="Input.Text" class="form-control" placeholder="Comment text" style="height: 200px"></textarea>
+                            }
+                        }
+
+                        <label asp-for="Input.Text">Comment text</label>
+                        <span asp-validation-for="Input.Text" class="text-danger"></span>
+                    </div>
+
+                    @{
+                        if (Model.Post.IsLocked)
+                        {
+                            <div>
+                                <button id="create-comment-submit" type="button" class="w-100 btn btn-lg btn-primary" disabled>Create comment <small class="text-muted"><i>(Post is locked)</i></small></button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <button id="create-comment-submit" type="submit" class="w-100 btn btn-lg btn-primary">Create comment</button>
+                            </div>
+                        }
+                    }
+
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/tinymce/tinymce.min.js" asp-append-version="true" referrerpolicy="origin"></script>
+
+    <script type="text/javascript">
+           tinymce.init({
+               selector: 'textarea#Input_Text'
+           });
+    </script>
+}

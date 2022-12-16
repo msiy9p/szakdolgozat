@@ -1,0 +1,46 @@
+﻿@page "/Group/{gid:groupid}/Books/{size:int=25}/{location:min(1)=1}"
+@using LibellusWeb.ViewModels
+@model LibellusWeb.Pages.Group.Book.BooksModel
+@{
+    ViewData["Title"] = "Books";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+        @{
+            var createRoute = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+            };
+        }
+        <div class="d-flex justify-content-between">
+            <h2>Books.</h2><a asp-page="/Group/Book/CreateBook" asp-all-route-data="createRoute"><button class="btn btn-outline-success btn-sm" type="button">Create new book</button> </a></div>
+
+        <partial name="_SearchPartial" model="string.Empty"/>
+
+        <hr/>
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <partial name="_BookVmTableRowHeaderPartial"/>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (var book in Model.Books)
+                {
+                    <tr>
+                        <partial name="_BookVmTableRowPartial" model="new BookVm(book, Model.GroupId, Model.CoverLinkBase)"/>
+                    </tr>
+                }
+            }
+        </table>
+
+        <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations"/>
+    </div>
+</div>

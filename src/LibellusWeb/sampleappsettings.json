@@ -1,0 +1,30 @@
+﻿{
+	"Logging": {
+		"LogLevel": {
+			"Default": "Information",
+			"Microsoft.AspNetCore": "Warning"
+		}
+	},
+	"AllowedHosts": "*",
+	"ConnectionStrings": {
+		"PostgresConnection": "Server=postgres.local;Port=5432;Database=APPLICATIONDATABASE;",
+		"RedisConnection": "redis.local:6379"
+	},
+	"UseCache": true,
+	"EmailConfiguration": {
+		"FromEmail": "test@mail.local",
+		"FromName": "test"
+	},
+	"SmtpConfiguration": {
+		"Host": "mail.local",
+		"Port": 25,
+		"Username": "",
+		"Password": ""
+	},
+	"S3Configuration": {
+		"Endpoint": "s3.local:9000",
+		"AccessKey": "",
+		"SecretKey": "",
+		"Region": ""
+	}
+}

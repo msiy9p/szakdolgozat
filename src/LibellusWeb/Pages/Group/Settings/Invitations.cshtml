@@ -1,0 +1,73 @@
+﻿@page "/Group/{gid:groupid}/Settings/Invitations/{handler?}"
+@using LibellusWeb.Models
+@using Libellus.Domain.Enums
+@model LibellusWeb.Pages.Group.Settings.InvitationsModel
+@{
+    ViewData["Title"] = "Invitations";
+}
+
+<div class="row d-flex">
+
+    <div class="col-md-2">
+        <partial name="Group/Settings/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-6 align-items-center justify-content-center">
+
+        <h2>Invitations.</h2>
+        <hr />
+        <partial name="Shared/_TopMarginGapPartial" />
+        
+        <section>
+            <h5>Invite user.</h5>
+            <partial name="_StatusMessage" for="StatusMessage" />
+            <form class="form-floating" id="invite" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Username" type="text" class="form-control" placeholder="Username">
+                    <label asp-for="Input.Username">Username</label>
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
+                </div>
+     
+                <div>
+                    <button id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Invite user</button>
+                </div>
+            </form>
+
+        </section>
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+        <hr />
+
+        <section>
+            <h5>Pending invitations.</h5>
+            
+            <div class="container">
+                <ol class="list-group list-group-numbered list-group-flush">
+                    @{
+                        foreach (var invitation in Model.Invitations)
+                        {
+                            <li class="list-group-item">
+                                <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, invitation.Invitee.AvailableProfilePictures)" />
+                                <span class="p-1 badge bigger-badge rounded-pill text-bg-light">@invitation.Invitee.UserName</span>
+                                <span class="p-1 badge bigger-badge rounded-pill text-bg-warning">@InvitationStatusExtensions.ToString(invitation.InvitationStatus)</span>
+                            </li>
+                        }
+                    }
+                    </ol>
+            </div>
+
+        </section>
+        
+        <partial name="Shared/_TopMarginGapPartial" />
+        <hr />
+
+        <section>
+            <h5>Received invitation requests.</h5>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

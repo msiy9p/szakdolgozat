@@ -1,0 +1,25 @@
+﻿@page "/Group/{gid:groupid}/Post/{pid:postid}/Comment/{cid:commentid}"
+@using LibellusWeb.ViewModels
+@model CommentModel
+@{
+    ViewData["Title"] = Model.Post.Title;
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+
+        <partial name="Group/Post/_PostVmPartial" model="new PostVm(Model.Post, Model.GroupId, Model.PostId, Model.LinkBase, true, Model.IsCreator, false)"/>
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+
+        @{
+            var showEdit = !Model.Post.IsLocked && Model.UserId == Model.Comment.CreatorId;
+
+            <partial name="_CommentVmPartial" model="new CommentVm(Model.Comment, Model.GroupId, Model.PostId, Model.LinkBase, showEdit)"/>
+        }
+    </div>
+</div>

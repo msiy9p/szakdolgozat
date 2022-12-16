@@ -1,0 +1,47 @@
+﻿@page "/Group/{gid:groupid}/CreateAuthor"
+@model LibellusWeb.Pages.Group.Author.CreateAuthorModel
+@{
+    ViewData["Title"] = "Create author";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+        <section>
+            <h2>Create a new author.</h2>
+            <hr />
+
+            <form class="form-floating" id="author" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Name" type="text" class="form-control" placeholder="Author name">
+                    <label asp-for="Input.Name">Author name</label>
+                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                </div>
+
+                <hr />
+                
+                <div class="container">
+                    <div class="row row-cols-2">
+                        <div class="mb-3 input-group">
+                            <label asp-for="Upload" class="input-group-text">Cover image</label>
+                            <input id="coverupload" class="form-control" type="file" asp-for="Upload" accept="image/*" />
+                            <button class="btn btn-outline-dark" type="button" id="coverclear" onclick="resetThing('coverupload')">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <button id="create-book-submit" type="submit" class="w-100 btn btn-lg btn-primary">Create author</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

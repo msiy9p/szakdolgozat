@@ -1,0 +1,81 @@
+﻿@using LibellusWeb.Models
+@model LibellusWeb.ViewModels.BookVm
+
+@{
+    var bookView = new Dictionary<string, string>
+    {
+        { "gid", Model.GroupId },
+        { "bid", Model.Book.FriendlyId.Value },
+    };
+
+
+    <td>
+        <a asp-page="/Group/Book/Book" asp-all-route-data="bookView">
+            <partial name="Shared/_CoverImagePartial" model="new CoverImage(Model.CoverLinkBase, Model.Book.AvailableCovers)" />
+        </a>
+    </td>
+    <td>
+        <a asp-page="/Group/Book/Book" asp-all-route-data="bookView">@Model.Book.Title</a>
+    </td>
+    <td>
+        @{
+            foreach (var author in Model.Book.Authors)
+            {
+                var authorView = new Dictionary<string, string>
+                {
+                    { "gid", Model.GroupId },
+                    { "aid", author.FriendlyId.Value },
+                };
+                <a asp-page="/Group/Author/Author" asp-all-route-data="authorView">
+                    <span class="badge p-1 big-badge rounded-pill text-bg-primary text-wrap">@author.Name.Value</span>
+                </a>
+            }
+        }
+    </td>
+    <td>
+        @{
+            if (Model.Book.Series is not null)
+            {
+                var seriesView = new Dictionary<string, string>
+                {
+                    { "gid", Model.GroupId },
+                    { "seid", Model.Book.Series.FriendlyId.Value },
+                };
+
+                <a asp-page="/Group/Series/Series" asp-all-route-data="seriesView">
+                    @Model.Book.Series?.Title.Value
+                </a>
+            }
+        }
+    </td>
+    <td>@Model.Book.NumberInSeries.ToString()</td>
+    <td>@Model.Book.LiteratureForm?.Name.Value</td>
+    <td>
+        @{
+            foreach (var genre in Model.Book.Genres)
+            {
+                var postfix = genre.IsFiction ? "(Fiction)" : "(Non-Fiction)";
+                <span class="badge p-1 big-badge rounded-pill text-bg-secondary text-wrap">
+                    @genre.Name.Value<i class="ps-1">@postfix</i>
+                </span>
+            }
+        }
+    </td>
+    <td>
+        @{
+            foreach (var tag in Model.Book.Tags)
+            {
+                <span class="badge p-1 big-badge rounded-pill text-bg-secondary text-wrap">@tag.Name.Value</span>
+            }
+        }
+    </td>
+    <td>
+        @{
+            foreach (var warningTag in Model.Book.WarningTags)
+            {
+                <span class="badge p-1 big-badge rounded-pill text-bg-warning text-wrap">@warningTag.Name.Value</span>
+            }
+        }
+    </td>
+
+}

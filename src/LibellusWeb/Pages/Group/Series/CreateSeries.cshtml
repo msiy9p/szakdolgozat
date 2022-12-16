@@ -1,0 +1,35 @@
+﻿@page "/Group/{gid:groupid}/CreateSeries"
+@model LibellusWeb.Pages.Group.Series.CreateSeriesModel
+@{
+    ViewData["Title"] = "Create series";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-6 align-items-center justify-content-center">
+        <h2>Create a new series.</h2>
+        <hr />
+        <section>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <form class="form-floating" id="series" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Title" type="text" class="form-control" placeholder="Series title">
+                    <label asp-for="Input.Title">Series title</label>
+                    <span asp-validation-for="Input.Title" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <button id="create-series-submit" type="submit" class="w-100 btn btn-lg btn-primary">Create series</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

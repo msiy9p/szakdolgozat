@@ -1,0 +1,122 @@
+﻿@using LibellusWeb.Models
+@model LibellusWeb.ViewModels.BookEditionVm
+
+<div class="container">
+    <div class="row row-cols-3 gx-5">
+
+        <div class="col-sm-2">
+
+            <partial name="Shared/_CoverImagePartial" model="new CoverImage(Model.CoverLinkBase, Model.BookEdition.AvailableCovers, 250)"/>
+
+        </div>
+
+        <div class="col-sm-2"></div>
+
+        <div class="col-sm">
+
+            <div class="card border-secondary mb-3">
+                <div class="card-header">
+                    @{
+                        var bookEditionView = new Dictionary<string, string>
+                        {
+                            { "gid", Model.GroupId },
+                            { "beid", Model.BookEdition.FriendlyId.Value },
+                        };
+
+                        if (Model.ShowLink)
+                        {
+                            <h4><a asp-page="/Group/BookEdition/BookEdition" asp-all-route-data="bookEditionView">@Model.BookEdition.Title</a></h4>
+                        }
+                        else
+                        {
+                            <h4>@Model.BookEdition.Title</h4>
+                        }
+                    }
+                </div>
+                <div class="card-body">@Model.BookEdition.Description?.Value</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        @{
+                            var bookView = new Dictionary<string, string>
+                            {
+                                { "gid", Model.GroupId },
+                                { "bid", Model.BookEdition.Book.BookFriendlyId.Value },
+                            };
+                            <a asp-page="/Group/Book/Book" asp-all-route-data="bookView">
+                                @Model.BookEdition.Book.Title.Value
+                            </a>
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        @{
+                            foreach (var author in Model.BookEdition.Book.Authors)
+                            {
+                                var authorView = new Dictionary<string, string>
+                                {
+                                    { "gid", Model.GroupId },
+                                    { "aid", author.AuthorFriendlyId.Value },
+                                };
+                                <a asp-page="/Group/Author/Author" asp-all-route-data="authorView">
+                                    <span class="badge p-1 big-badge rounded-pill text-bg-primary text-wrap">@author.Name.Value</span>
+                                </a>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">@Model.BookEdition.Publisher?.Name.Value</li>
+                    <li class="list-group-item">@Model.BookEdition.PublishedOn?.ToString()</li>
+                    <li class="list-group-item">@Model.BookEdition.Format?.Name.Value</li>
+                    <li class="list-group-item">@Model.BookEdition.Language?.Name.Value</li>
+                    <li class="list-group-item">
+                        @{
+                            if (Model.BookEdition.IsTranslation)
+                            {
+                                <span class="badge p-1 big-badge rounded-pill text-bg-warning text-wrap">Translation</span>
+                            }
+                            else
+                            {
+                                <span class="badge p-1 big-badge rounded-pill text-bg-success text-wrap">Original language</span>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">@Model.BookEdition.PageCount?.Value</li>
+                    <li class="list-group-item">@Model.BookEdition.Isbn?.Value</li>
+                </ul>
+                <div class="card-footer container text-center">
+                    <div class="row">
+                        <div class="col-sm">
+                            @{
+                                var datePrefix = Model.BookEdition.CreatedOnUtc == Model.BookEdition.ModifiedOnUtc ?
+                                    "Created on" :
+                                    "Modified on";
+
+                                var dateProper = Model.BookEdition.CreatedOnUtc == Model.BookEdition.ModifiedOnUtc ?
+                                    Model.BookEdition.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+                                    Model.BookEdition.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+                            }
+
+                            <small class="text-muted align-self-center">
+                                @datePrefix <span class="datetimerewrite">@dateProper</span>
+                            </small>
+                        </div>
+                        @{
+                            if (true)
+                            {
+                                var bookEdit = new Dictionary<string, string>
+                                {
+                                    { "gid", Model.GroupId },
+                                    { "beid", Model.BookEdition.FriendlyId.Value },
+                                };
+
+                                <div class="col-sm">
+                                    <a asp-page="/Group/BookEdition/EditBookEdition" asp-all-route-data="bookEdit" class="btn btn-warning">Edit book edition</a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

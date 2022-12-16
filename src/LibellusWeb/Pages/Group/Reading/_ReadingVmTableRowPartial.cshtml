@@ -1,0 +1,109 @@
+﻿@using LibellusWeb.Models
+@using System.Globalization
+@model LibellusWeb.ViewModels.ReadingVm
+
+@{
+    var bookEditionView = new Dictionary<string, string>
+    {
+        { "gid", Model.GroupId },
+        { "beid", Model.Reading.BookEdition.BookEditionFriendlyId.Value },
+    };
+}
+
+<td>
+    <a asp-page="/Group/BookEdition/BookEdition" asp-all-route-data="bookEditionView">@Model.Reading.BookEdition.Title</a>
+</td>
+<td>
+    @{
+        foreach (var author in Model.Reading.BookEdition.Authors)
+        {
+            var authorView = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+                { "aid", author.AuthorFriendlyId.Value },
+            };
+            <a asp-page="/Group/Author/Author" asp-all-route-data="authorView">
+                <span class="badge p-1 big-badge rounded-pill text-bg-primary text-wrap">@author.Name.Value</span>
+            </a>
+        }
+    }
+</td>
+<td>
+    @{
+        if (Model.Reading.StartedOnUtc.HasValue)
+        {
+            var startDateProper = Model.Reading.StartedOnUtc.Value.ToDateTimeUtc().ToString("yyyy. MM. dd.");
+            <span >@startDateProper</span>
+        }
+    }
+</td>
+<td>
+    @{
+        if (Model.Reading.FinishedOnUtc.HasValue)
+        {
+            var finishDateProper = Model.Reading.FinishedOnUtc.Value.ToDateTimeUtc().ToString("yyyy. MM. dd.");
+            <span >@finishDateProper</span>
+        }
+    }
+</td>
+<td>
+    @{
+        if (Model.Reading.IsDnf)
+        {
+            <small class="text-muted align-self-center">
+                <img src="~/lib/bootstrap-icons/check-circle-fill.svg" alt="Marked as dnf"/>
+            </small>
+        }
+    }
+</td>
+<td>
+    @{
+        if (Model.Reading.IsReread)
+        {
+            <small class="text-muted align-self-center">
+                <img src="~/lib/bootstrap-icons/journal-check.svg" alt="Is reread"/>
+            </small>
+        }
+    }
+</td>
+<td>
+    @{
+        if (Model.Reading.Score.HasValue)
+        {
+            var score = Model.Reading.Score.Value.ToString(CultureInfo.InvariantCulture);
+            @score
+        }
+    }
+</td>
+<td>
+    @{
+        var userName = Model.Reading.Creator is not null ? Model.Reading.Creator.UserName : "[deleted]";
+    }
+    
+    <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, Model.Reading.Creator?.AvailableProfilePictures)"/>
+    <span class="p-1">@userName</span>
+</td>
+<td>
+    @{
+        if (Model.ShowEdit)
+        {
+            var editRoute = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+                { "rid", Model.Reading.FriendlyId.Value},
+            };
+            <a asp-page="/Group/Reading/EditReading" asp-all-route-data="editRoute"><button class="btn btn-success btn-sm" type="button">Edit</button></a>
+
+        }
+        else
+        {
+            var viewRoute = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+                { "rid", Model.Reading.FriendlyId.Value},
+            };
+            <a asp-page="/Group/Reading/Reading" asp-all-route-data="viewRoute"><button class="btn btn-success btn-sm" type="button">View</button></a>
+
+        }
+    }
+</td>

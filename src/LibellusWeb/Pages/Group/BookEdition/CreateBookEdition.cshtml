@@ -1,0 +1,280 @@
+﻿@page "/Group/{gid:groupid}/Book/{bid:bookid}/CreateBookEdition"
+@using Nanoid
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.BookEdition.CreateBookEditionModel
+@{
+    ViewData["Title"] = "Create book edition";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+        <section>
+            <h2>Create a new book edition.</h2>
+            <hr />
+            
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <partial name="Group/Book/_BookVmTableRowHeaderPartial" />
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <partial name="Group/Book/_BookVmTableRowPartial" model="new BookVm(Model.Book, Model.GroupId, Model.CoverLinkBase)" />
+                    </tr>
+                </tbody>
+            </table>    
+
+            <hr />
+
+            <form class="form-floating" id="bookedition" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Title" type="text" class="form-control" placeholder="Book edition title">
+                    <label asp-for="Input.Title">Book title</label>
+                    <span asp-validation-for="Input.Title" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea asp-for="Input.Description" class="form-control" placeholder="Description text" style="height: 200px"></textarea>
+                    <label asp-for="Input.Description">Description (Optional)</label>
+                    <span asp-validation-for="Input.Description" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsTranslation" class="form-check-label">
+                        <input asp-for="Input.IsTranslation" class="form-check-input" />
+                        Is translation?
+                    </label>
+                </div>
+
+                <hr />
+
+                <div class="container">
+                    <div class="row row-cols-2">
+                        <div id="format-selection" class="col">
+
+                            <div class="input-group mb-3">
+                                <button class="btn btn-outline-primary text-wrap  dropdown-toggle"
+                                        type="button"
+                                        id="newformat"
+                                        data-bs-toggle="dropdown">
+                                    Add Format
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li onclick="addTrueFalseValue('newformatinput', 'radio', '', 'formatgroup', '@nameof(Model.InputFormat)', 'true', '(Digital)', '(Not Digital)')">
+                                        <a class="dropdown-item" href="#format-selection">As digital</a>
+                                    </li>
+                                    <li onclick="addTrueFalseValue('newformatinput', 'radio', '', 'formatgroup', '@nameof(Model.InputFormat)', 'false', '(Digital)', '(Not Digital)')">
+                                        <a class="dropdown-item" href="#format-selection">As not digital</a>
+                                    </li>
+                                </ul>
+                                <input id="newformatinput"
+                                       type="text"
+                                       class="form-control"
+                                       placeholder="Format"
+                                       aria-label="Format" />
+                                <button class="btn btn-outline-dark" type="button" id="formatclear" onclick="unselect('InputFormat')">Clear</button>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <ul id="formatgroup" class="list-group" style="max-height: 300px; overflow-y: auto;">
+                                    @{
+                                        foreach (var format in Model.Formats)
+                                        {
+                                            var value = $"{format.Id.Value.ToString("N")}-{format.Name.Value}";
+                                            var name = format.IsDigital ? "(Digital)" : "(Not Digital)";
+
+                                            <li class="list-group-item">
+                                                @{
+                                                    var tempId = Nanoid.Generate(size: 7);
+                                                }
+                                                <input id="@tempId" value="@value" name="@nameof(Model.InputFormat)" class="form-check-input ms-1 me-1" type="radio" />
+                                                <label class="form-check-label ms-1 me-1" for="@tempId">
+                                                    @format.Name.Value<i class="ms-1">@name</i>
+                                                </label>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div id="language-selection" class="col">
+
+                            <div class="input-group mb-3">
+                                <button class="btn btn-outline-primary text-wrap"
+                                        type="button"
+                                        id="newlanguage"
+                                        onclick="addNewSimpleValue('newlanguageinput', 'radio', 'newlanguageoptions', 'languagegroup', '@nameof(Model.InputLanguage)')">
+                                    Add language
+                                </button>
+                                <input id="newlanguageinput"
+                                       type="text"
+                                       class="form-control"
+                                       placeholder="Language"
+                                       aria-label="Language"
+                                       list="newlanguageoptions" />
+                                <datalist id="newlanguageoptions">
+                                    @{
+                                        foreach (var value in Model.Languages)
+                                        {
+                                            <option value="@value.Name.Value"></option>
+                                        }
+                                    }
+                                </datalist>
+                                <button class="btn btn-outline-dark" type="button" id="languageclear" onclick="unselect('InputLanguage')">Clear</button>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <ul id="languagegroup" class="list-group">
+                                    @{
+                                        foreach (var value in Model.Languages)
+                                        {
+                                            <li class="list-group-item">
+                                                @{
+                                                    var tempId = Nanoid.Generate(size: 7);
+                                                    var inputValue = $"{value.Id.Value.ToString("N")}-{value.Name.Value}";
+                                                }
+                                                <input id="@tempId" value="@inputValue" name="@nameof(Model.InputLanguage)" class="form-check-input ms-1 me-1" type="radio" />
+                                                <label class="form-check-label ms-1 me-1" for="@tempId">
+                                                    @value.Name.Value
+                                                </label>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+
+                        </div>
+                        
+                        <div id="publisher-selection" class="col">
+
+                            <div class="input-group mb-3">
+                                <button class="btn btn-outline-primary text-wrap"
+                                        type="button"
+                                        id="newpublisher"
+                                        onclick="addNewSimpleValue('newpublisherinput', 'radio', 'newpublisheroptions', 'publishergroup', '@nameof(Model.InputPublisher)')">
+                                    Add publisher
+                                </button>
+                                <input id="newpublisherinput"
+                                       type="text"
+                                       class="form-control"
+                                       placeholder="Publisher"
+                                       aria-label="Publisher"
+                                       list="newpublisheroptions" />
+                                <datalist id="newpublisheroptions">
+                                    @{
+                                        foreach (var value in Model.Publishers)
+                                        {
+                                            <option value="@value.Name.Value"></option>
+                                        }
+                                    }
+                                </datalist>
+                                <button class="btn btn-outline-dark" type="button" id="publisherclear" onclick="unselect('InputPublisher')">Clear</button>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <ul id="publishergroup" class="list-group">
+                                    @{
+                                        foreach (var value in Model.Publishers)
+                                        {
+                                            <li class="list-group-item">
+                                                @{
+                                                    var tempId = Nanoid.Generate(size: 7);
+                                                    var inputValue = $"{value.Id.Value.ToString("N")}-{value.Name.Value}";
+                                                }
+                                                <input id="@tempId" value="@inputValue" name="@nameof(Model.InputPublisher)" class="form-check-input ms-1 me-1" type="radio" />
+                                                <label class="form-check-label ms-1 me-1" for="@tempId">
+                                                    @value.Name.Value
+                                                </label>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="container">
+                    <div class="row row-cols-2">
+
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="pagecount">Page count</span>
+                                <input asp-for="InputPageCount" type="number" min="1" step="1" class="form-control" placeholder="Page count" aria-label="Page count" aria-describedby="pagecount">
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="wordcount">Word count</span>
+                                <input asp-for="InputWordCount" type="number" min="0" step="1" class="form-control" placeholder="Word count" aria-label="Word count" aria-describedby="wordcount">
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="row row-cols-2">
+
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                @{
+                                    var today = DateTime.Now.Date.ToString("yyyy.MM.dd");
+                                }
+                                <span class="input-group-text" id="publishedon">Published on</span>
+                                <input asp-for="InputPublishedOn" type="text" class="form-control" placeholder="@today" aria-label="Published on" aria-describedby="publishedon">
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="isbn">ISBN</span>
+                                <input asp-for="InputIsbn" type="text" class="form-control" placeholder="ISBN" aria-label="ISBN" aria-describedby="isbn">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr />
+                <div class="container">
+                    <div class="row row-cols-2">
+                        <div class="mb-3 input-group">
+                            <label asp-for="Upload" class="input-group-text">Cover image</label>
+                            <input id="coverupload" class="form-control" type="file" asp-for="Upload" accept="image/*" />
+                            <button class="btn btn-outline-dark" type="button" id="coverclear" onclick="resetThing('coverupload')">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <button id="create-bookedition-submit" type="submit" class="w-100 btn btn-lg btn-primary">Create book edition</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $('#book edition').on('submit', function () {
+
+            addNewSimpleValue('newlanguageinput', 'radio', 'newlanguageoptions', 'languagegroup', '@nameof(Model.InputLanguage)');
+            addNewSimpleValue('newpublisherinput', 'radio', 'newpublisheroptions', 'publishergroup', '@nameof(Model.InputPublisher)');
+
+            return true;
+        });
+    </script>
+}

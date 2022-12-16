@@ -1,0 +1,54 @@
+﻿@page "/Groups/Search/{term:term}/{size:int=25}/{location:min(1)=1}/"
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.GroupSearchModel
+@{
+    ViewData["Title"] = "Group search";
+}
+
+<div class="row d-flex align-items-center justify-content-center">
+    <div class="col-md-8">
+        @{
+            var foundGroups = Model.FoundCount > 1 ?
+                $"Found {Model.FoundCount} groups." :
+                $"Found {Model.FoundCount} group.";
+        }
+
+        <div class="d-flex justify-content-between">
+            <h2>@foundGroups</h2><a asp-page="/Group/CreateGroup"><button class="btn btn-outline-success btn-sm" type="button">Create new group</button> </a></div>
+
+        <partial name="_SearchPartial" model="string.Empty" />
+
+        <hr/>
+        @{
+            if (Model.Groups.Any())
+            {
+                var index = 1;
+                foreach (var group in Model.Groups)
+                {
+                    <partial name="_GroupVmPartial" model="new GroupVm(group)"/>
+
+                    if (index < Model.Groups.Count)
+                    {
+                        <partial name="Shared/_TopMarginGapPartial"/>
+                    }
+
+                    index++;
+                }
+            }
+            else
+            {
+                <div class="card border-secondary">
+                    <div class="card-header">
+                        No groups found.
+                    </div>
+                    <div class="card-body">
+                        <a class="stretched-link" asp-page="/Group/CreateGroup" class="btn btn-primary">Click here to create one.</a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations"/>
+</div>

@@ -1,0 +1,39 @@
+﻿@page "/Group/{gid:groupid}/Shelf/{shid:shelfid}/{size:int=25}/{location:min(1)=1}"
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.Shelf.ShelfModel
+@{
+    ViewData["Title"] = @Model.Shelf.Name.Value;
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+
+        <partial name="_ShelfVmPartial" model="new ShelfVm(Model.Shelf, Model.GroupId, Model.ShelfId, true, false)" />
+
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <partial name="Group/Book/_BookVmTableRowHeaderPartial" />
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var book in Model.Shelf.Books)
+                    {
+                        <tr>
+                            <partial name="Group/Book/_BookVmTableRowPartial" model="new BookVm(book, Model.GroupId, Model.CoverLinkBase)" />
+                        </tr>
+                    }
+                }
+        </table>
+
+        <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations" />
+    </div>
+</div>

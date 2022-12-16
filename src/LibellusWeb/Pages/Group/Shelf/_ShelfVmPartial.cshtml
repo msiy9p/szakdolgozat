@@ -1,0 +1,88 @@
+﻿@model LibellusWeb.ViewModels.ShelfVm
+
+@{
+    var datePrefix = Model.Shelf.CreatedOnUtc == Model.Shelf.ModifiedOnUtc ?
+        "Created on" :
+        "Modified on";
+
+    var dateProper = Model.Shelf.CreatedOnUtc == Model.Shelf.ModifiedOnUtc ?
+        Model.Shelf.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+        Model.Shelf.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+
+    var border = Model.Shelf.IsLocked ? "border-secondary" : "border-success";
+}
+
+<div id="@Model.Shelf.FriendlyId.Value" class="card border border-2 @border">
+    <div class="card-header container">
+        <h2>@Model.Shelf.Name</h2>
+    </div>
+
+    <div class="card-body">
+        @{
+            var desc = Model.Shelf.Description is null ? string.Empty : Model.Shelf.Description.Value;
+        }
+
+        <p class="card-text">@desc</p>
+    </div>
+    <div class="card-footer container text-center">
+        <div class="row">
+            <div class="col-sm-2">
+                @{
+                    var bookCount = Model.Shelf.BookCount > 1 ?
+                    $"{Model.Shelf.BookCount} Books" :
+                    $"{Model.Shelf.BookCount} Book";
+                }
+
+                <small class="text-muted align-self-center">
+                    <img src="~/lib/bootstrap-icons/book.svg" alt="Book icon"/> @bookCount
+                </small>
+            </div>
+            <div class="col-sm-auto">
+                <small class="text-muted align-self-center">@datePrefix <span class="datetimerewrite">@dateProper</span></small>
+            </div>
+            
+            @{
+                if (Model.ShowEditShelf)
+                {
+                    var shelfEdit = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "shid", Model.ShelfId },
+                    };
+
+                    <div class="col-sm-auto">
+                        <a asp-page="/Group/Shelf/EditShelf" asp-all-route-data="shelfEdit" class="btn btn-warning">Edit shelf</a>
+                    </div>
+                }
+            }
+
+            @{
+                if (Model.ShowBackToShelf)
+                {
+                    var shelfView = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "shid", Model.ShelfId },
+                    };
+
+                    <div class="col-sm-auto">
+                        <a asp-page="/Group/Shelf/Shelf" asp-all-route-data="shelfView" class="btn btn-primary">Go back to shelf</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    
+    @{
+        if (!Model.ShowEditShelf && !Model.ShowBackToShelf)
+        {
+            var shelfView = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+                { "shid", Model.Shelf.FriendlyId.Value },
+            };
+
+            <a class="stretched-link" asp-page="/Group/Shelf/Shelf" asp-all-route-data="shelfView"></a>
+        }
+    }
+</div>

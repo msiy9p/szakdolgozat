@@ -1,0 +1,53 @@
+﻿@page "/Group/{gid:groupid}/BookEditions/Search/{term:term}/{size:int=25}/{location:min(1)=1}"
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.BookEdition.BookEditionSearchModel
+@{
+    ViewData["Title"] = "Book editions";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+        @{
+            var createRoute = new Dictionary<string, string>
+        {
+        { "gid", Model.GroupId },
+        };
+        }
+        <div class="d-flex justify-content-between">
+            @{
+                var foundBooks = Model.FoundCount > 1 ?
+                $"Found {Model.FoundCount} book editions." :
+                $"Found {Model.FoundCount} book edition.";
+            }
+            <h2>@foundBooks</h2>
+        </div>
+
+        <partial name="_SearchPartial" model="Model.InputSearchTerm" />
+
+        <hr />
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <partial name="_BookEditionVmTableRowHeaderPartial" />
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var book in Model.BookEditions)
+                    {
+                        <tr>
+                            <partial name="_BookEditionVmTableRowPartial" model="new BookEditionVm(book, Model.GroupId, Model.CoverLinkBase, true)" />
+                        </tr>
+                    }
+                }
+        </table>
+
+        <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations" />
+    </div>
+</div>

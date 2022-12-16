@@ -1,0 +1,15 @@
+﻿@model string
+
+@{
+    var routeParam = new Dictionary<string, string>
+    {
+        { "gid", Model },
+    };
+}
+
+<nav class="nav nav-pills flex-column">
+    <a class="nav-link @ManageNavPages.SettingsNavClass(ViewContext)" id="Settings" asp-page="/Group/Settings/Settings" asp-all-route-data="routeParam">Settings</a>
+    <a class="nav-link @ManageNavPages.MembersNavClass(ViewContext)" id="Members" asp-page="/Group/Settings/Members" asp-all-route-data="routeParam">Members</a>
+    <a class="nav-link @ManageNavPages.InvitationsNavClass(ViewContext)" id="Invitations" asp-page="/Group/Settings/Invitations" asp-all-route-data="routeParam">Invitations</a>
+    <a class="nav-link @ManageNavPages.TagsNavClass(ViewContext)" id="Tags" asp-page="/Group/Settings/Tags" asp-all-route-data="routeParam">Tags</a>
+</nav>

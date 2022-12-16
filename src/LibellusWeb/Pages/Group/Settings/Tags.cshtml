@@ -1,0 +1,365 @@
+﻿@page "/Group/{gid:groupid}/Settings/Tags/{handler?}"
+@model LibellusWeb.Pages.Group.Settings.TagsModel
+@{
+    ViewData["Title"] = "Tags";
+}
+
+<div class="row d-flex">
+
+    <div class="col-md-2">
+        <partial name="Group/Settings/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-6 align-items-center justify-content-center">
+
+        <h2>Meta tags.</h2>
+        <hr />
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <section>
+            <h5>Genres.</h5>
+            
+            <div class="container">
+                <form class="form-floating" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="input-group mb-3">
+                        <button asp-page-handler="AddGenre" class="btn btn-outline-primary text-wrap"type="submit">Add</button>
+                        <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Genre">
+                    </div>
+                </form>
+            </div>
+
+            <div class="container">
+                @{
+                    foreach (var genre in Model.Genres)
+                    {
+                        <partial name="_StatusMessage" for="StatusMessage" />
+                        <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                            <div class="form-floating mb-3 col-sm">
+                                <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Genre" value="@genre.Name.Value">
+                                <label asp-for="Input.InputValue">Genre</label>
+                                <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                                <input type="hidden" asp-for="Input.InputId" value="@genre.Id.ToString()" />
+                            </div>
+
+                            <div class="col-sm">
+                                <button asp-page-handler="EditGenre" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                            </div>
+                            <div class="col-sm">
+                                <button asp-page-handler="DeleteGenre" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    }
+                }
+            </div>
+
+        </section>
+        
+        <hr />
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <section>
+            <h5>Literature forms.</h5>
+        
+            <div class="container">
+                <form class="form-floating" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="input-group mb-3">
+                        <button asp-page-handler="AddLitForm" class="btn btn-outline-primary text-wrap" type="submit">Add</button>
+                        <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Literature form">
+                    </div>
+                </form>
+            </div>
+            
+            <div class="container">
+                @{
+                    foreach (var literatureForm in Model.LiteratureForms)
+                    {
+                        <partial name="_StatusMessage" for="StatusMessage" />
+                        <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                            <div class="form-floating mb-3 col-sm">
+                                <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Literature form" value="@literatureForm.Name.Value">
+                                <label asp-for="Input.InputValue">Literature form</label>
+                                <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                                <input type="hidden" asp-for="Input.InputId" value="@literatureForm.Id.ToString()" />
+                            </div>
+
+                            <div class="col-sm">
+                                <button asp-page-handler="EditLitForm" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                            </div>
+                            <div class="col-sm">
+                                <button asp-page-handler="DeleteLitForm" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    }
+                }
+            </div>
+
+        </section>
+        
+        <hr />
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <section>
+            <h5>Tags.</h5>
+            
+            <div class="container">
+                <form class="form-floating" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="input-group mb-3">
+                        <button asp-page-handler="AddTag" class="btn btn-outline-primary text-wrap" type="submit">Add</button>
+                        <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Tag">
+                    </div>
+                </form>
+            </div>
+
+            <div class="container">
+                @{
+                    foreach (var tag in Model.Tags)
+                    {
+                        <partial name="_StatusMessage" for="StatusMessage" />
+                        <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                            <div class="form-floating mb-3 col-sm">
+                                <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Tag" value="@tag.Name.Value">
+                                <label asp-for="Input.InputValue">Tag</label>
+                                <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                                <input type="hidden" asp-for="Input.InputId" value="@tag.Id.ToString()" />
+                            </div>
+
+                            <div class="col-sm">
+                                <button asp-page-handler="EditTag" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                            </div>
+                            <div class="col-sm">
+                                <button asp-page-handler="DeleteTag" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    }
+                }
+            </div>
+
+        </section>
+        
+        <hr />
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <section>
+            <h5>Warning tags.</h5>
+            
+            <div class="container">
+                <form class="form-floating" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="input-group mb-3">
+                        <button asp-page-handler="AddWarningTag" class="btn btn-outline-primary text-wrap" type="submit">Add</button>
+                        <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Warning tag">
+                    </div>
+                </form>
+            </div>
+
+            <div class="container">
+                @{
+                    foreach (var warningTag in Model.WarningTags)
+                    {
+                        <partial name="_StatusMessage" for="StatusMessage" />
+                        <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                            <div class="form-floating mb-3 col-sm">
+                                <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Warning tag" value="@warningTag.Name.Value">
+                                <label asp-for="Input.InputValue">Warning tag</label>
+                                <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                                <input type="hidden" asp-for="Input.InputId" value="@warningTag.Id.ToString()" />
+                            </div>
+
+                            <div class="col-sm">
+                                <button asp-page-handler="EditWarningTag" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                            </div>
+                            <div class="col-sm">
+                                <button asp-page-handler="DeleteWarningTag" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    }
+                }
+            </div>
+
+        </section>
+        
+        <hr />
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <section>
+            <h5>Publishers.</h5>
+            
+            <div class="container">
+                <form class="form-floating" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="input-group mb-3">
+                        <button asp-page-handler="AddPublisher" class="btn btn-outline-primary text-wrap" type="submit">Add</button>
+                        <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="publisher">
+                    </div>
+                </form>
+            </div>
+
+            <div class="container">
+                @{
+                    foreach (var publisher in Model.Publishers)
+                    {
+                        <partial name="_StatusMessage" for="StatusMessage" />
+                        <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                            <div class="form-floating mb-3 col-sm">
+                                <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Publisher" value="@publisher.Name.Value">
+                                <label asp-for="Input.InputValue">Publisher</label>
+                                <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                                <input type="hidden" asp-for="Input.InputId" value="@publisher.Id.ToString()" />
+                            </div>
+
+                            <div class="col-sm">
+                                <button asp-page-handler="EditPublisher" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                            </div>
+                            <div class="col-sm">
+                                <button asp-page-handler="DeletePublisher" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                            </div>
+                        </form>
+                    }
+                }
+            </div>
+
+        </section>
+        
+    <hr />
+    <partial name="Shared/_TopMarginGapPartial" />
+
+    <section>
+            <h5>Languages.</h5>
+            
+        <div class="container">
+            <form class="form-floating" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="input-group mb-3">
+                    <button asp-page-handler="AddLanguage" class="btn btn-outline-primary text-wrap"type="submit">Add</button>
+                    <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Language">
+                </div>
+            </form>
+        </div>
+
+        <div class="container">
+            @{
+                foreach (var language in Model.Languages)
+                {
+                    <partial name="_StatusMessage" for="StatusMessage" />
+                    <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3 col-sm">
+                                <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Language" value="@language.Name.Value">
+                                <label asp-for="Input.InputValue">Language</label>
+                            <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                            <input type="hidden" asp-for="Input.InputId" value="@language.Id.ToString()" />
+                        </div>
+
+                        <div class="col-sm">
+                                <button asp-page-handler="EditLanguage" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                        </div>
+                        <div class="col-sm">
+                                <button asp-page-handler="DeleteLanguage" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                        </div>
+                    </form>
+                }
+            }
+        </div>
+
+    </section>
+    
+    <hr />
+    <partial name="Shared/_TopMarginGapPartial" />
+
+    <section>
+        <h5>Format.</h5>
+        
+        <div class="container">
+            <form class="form-floating" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="input-group mb-3">
+                    <button asp-page-handler="AddFormat" class="btn btn-outline-primary text-wrap"type="submit">Add</button>
+                    <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Format">
+                </div>
+            </form>
+        </div>
+
+        <div class="container">
+            @{
+                foreach (var format in Model.Formats)
+                {
+                    <partial name="_StatusMessage" for="StatusMessage" />
+                    <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3 col-sm">
+                            <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Format" value="@format.Name.Value">
+                            <label asp-for="Input.InputValue">Format</label>
+                            <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                            <input type="hidden" asp-for="Input.InputId" value="@format.Id.ToString()" />
+                        </div>
+
+                        <div class="col-sm">
+                                <button asp-page-handler="EditFormat" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                        </div>
+                        <div class="col-sm">
+                                <button asp-page-handler="DeleteFormat" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                        </div>
+                    </form>
+                }
+            }
+        </div>
+
+    </section>
+    
+    <hr />
+    <partial name="Shared/_TopMarginGapPartial" />
+
+    <section>
+        <h5>Labels.</h5>
+        
+        <div class="container">
+            <form class="form-floating" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="input-group mb-3">
+                    <button asp-page-handler="AddLabel" class="btn btn-outline-primary text-wrap"type="submit">Add</button>
+                    <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Label">
+                </div>
+            </form>
+        </div>
+
+        <div class="container">
+            @{
+                foreach (var label in Model.Labels)
+                {
+                    <partial name="_StatusMessage" for="StatusMessage" />
+                    <form class="row row-cols-3 d-flex justify-content-between form-floating" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3 col-sm">
+                            <input asp-for="Input.InputValue" type="text" class="form-control" placeholder="Label" value="@label.Name.Value">
+                                <label asp-for="Input.InputValue">Label</label>
+                            <span asp-validation-for="Input.InputValue" class="text-danger"></span>
+                            <input type="hidden" asp-for="Input.InputId" value="@label.Id.ToString()" />
+                        </div>
+
+                        <div class="col-sm">
+                                <button asp-page-handler="EditLabel" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit</button>
+                        </div>
+                        <div class="col-sm">
+                                <button asp-page-handler="DeleteLabel" id="invite-submit" type="submit" class="w-100 btn btn-lg btn-danger">Delete</button>
+                        </div>
+                    </form>
+                }
+            }
+        </div>
+
+    </section>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,29 @@
+﻿@model LibellusWeb.ViewModels.GroupVm
+
+@{
+    var border = Model.Group.IsPrivate ? "border-secondary" : "border-success";
+    var datePrefix = Model.Group.CreatedOnUtc == Model.Group.ModifiedOnUtc ?
+        "Created on" :
+        "Modified on";
+
+    var dateProper = Model.Group.CreatedOnUtc == Model.Group.ModifiedOnUtc ?
+        Model.Group.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+        Model.Group.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+
+    <div class="card border border-2 @border">
+        <div class="card-header">
+            <h2>@Model.Group.Name</h2>
+        </div>
+        <div class="card-body">
+            @{
+                var desc = Model.Group.Description is null ? string.Empty : Model.Group.Description.Value;
+            }
+            <p class="card-text">@desc</p>
+        </div>
+        <div class="card-footer container text-center">
+            <small class="text-muted align-self-center">@datePrefix <span class="datetimerewrite" >@dateProper</span></small>
+        </div>
+
+        <a class="stretched-link" asp-page="/Group/Post/Posts" asp-route-gid="@Model.Group.FriendlyId.Value"></a>
+    </div>
+}

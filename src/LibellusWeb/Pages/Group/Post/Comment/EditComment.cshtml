@@ -1,0 +1,99 @@
+﻿@page "/Group/{gid:groupid}/Post/{pid:postid}/EditComment/{cid:commentid}/{handler?}"
+@using Libellus.Application.Common.Interfaces.Services
+@using Microsoft.AspNetCore.Html
+@inject IHtmlSanitizer HtmlSanitizer
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.Post.Comment.EditCommentModel
+@{
+    ViewData["Title"] = "Edit comment";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+        <h2>Edit comment.</h2>
+        <hr/>
+        <section>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <partial name="Group/Post/_PostVmPartial" model="new PostVm(Model.Post, Model.GroupId, Model.PostId, Model.LinkBase, false, false, true)"/>
+
+            <partial name="Shared/_TopMarginGapPartial"/>
+
+            <div class="container">
+                <form class="form-floating" id="comment" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-3">
+                        @{
+                            var htmlString = new HtmlString(HtmlSanitizer.Sanitize(Model.Input.Text));
+                        }
+
+                        @{
+                            if (Model.Post.IsLocked)
+                            {
+                                <textarea disabled readonly id="Input_Text" name="Input.Text" class="form-control" placeholder="Comment text" style="height: 200px">@htmlString</textarea>
+                            }
+                            else
+                            {
+                                <textarea id="Input_Text" name="Input.Text" class="form-control" placeholder="Comment text" style="height: 200px">@htmlString</textarea>
+                            }
+                        }
+
+                        <label asp-for="Input.Text">Comment text</label>
+                        <span asp-validation-for="Input.Text" class="text-danger"></span>
+                    </div>
+
+                    @{
+                        if (Model.Post.IsLocked)
+                        {
+                            <div>
+                                <button id="edit-comment-submit" type="button" class="w-100 btn btn-lg btn-primary" disabled>Edit comment <small class="text-muted"><i>(Post is locked)</i></small></button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <button id="edit-comment-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit comment</button>
+                            </div>
+                        }
+                    }
+
+                </form>
+                <form asp-page-handler="delete" class="form-floating" id="comment-delete" method="post">
+
+                    @{
+                        if (Model.Post.IsLocked)
+                        {
+                            <div>
+                                <button id="delte-comment-submit" type="button" class="w-100 btn btn-lg btn-primary" disabled>Delete comment <small class="text-muted"><i>(Post is locked)</i></small></button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <button id="delte-comment-submit" type="submit" class="mt-2 w-100 btn btn-lg btn-danger">Delete comment</button>
+                            </div>
+                        }
+                    }
+
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+
+    <script src="~/lib/tinymce/tinymce.min.js" asp-append-version="true" referrerpolicy="origin"></script>
+
+    <script type="text/javascript">
+           tinymce.init({
+               selector: 'textarea#Input_Text'
+           });
+    </script>
+}

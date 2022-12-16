@@ -1,0 +1,58 @@
+﻿@page "/Group/{gid:groupid}/BookEdition/{beid:bookeditionid}"
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.BookEdition.BookEditionModel
+@{
+    ViewData["Title"] = @Model.BookEdition.Title.Value;
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+
+        <partial name="_BookEditionVmPartial" model="new BookEditionVm(Model.BookEdition, Model.GroupId, Model.CoverLinkBase, false)" />
+
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <hr />
+        <div class="d-flex justify-content-between">
+            @{
+                var createRoute = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+                { "beid", Model.BookEditionId },
+            };
+            }
+            <h4>Readings</h4><a asp-page="/Group/Reading/CreateReading" asp-all-route-data="createRoute"><button class="btn btn-outline-success btn-sm" type="button">Start new reading</button></a>
+        </div>
+
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <partial name="Group/Reading/_ReadingVmTableRowHeaderPartial"/>
+            </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var reading in Model.BookEdition.Readings)
+                    {
+                        var readingView = new Dictionary<string, string>
+                        {
+                            { "gid", Model.GroupId },
+                            { "rid", reading.FriendlyId.Value },
+                        };
+
+                        <tr>
+                            <partial name="Group/Reading/_ReadingVmTableRowPartial" model="new ReadingVm(reading, Model.GroupId, Model.ProfileLinkBase, false)" />
+                        </tr>
+                    }
+                }
+        </table>
+
+    </div>
+</div>

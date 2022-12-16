@@ -1,0 +1,55 @@
+﻿@page "/Group/{gid:groupid}/Authors/Search/{term:term}/{size:int=25}/{location:min(1)=1}"
+@using LibellusWeb.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.Author.AuthorSearchModel
+@{
+    ViewData["Title"] = "Authors";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId"/>
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+        @{
+            var createRoute = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+            };
+        }
+        <div class="d-flex justify-content-between">
+            @{
+                var foundPosts = Model.FoundCount > 1 ?
+                $"Found {Model.FoundCount} authors." :
+                $"Found {Model.FoundCount} author.";
+            }
+
+            <h2>@foundPosts</h2>
+            <a asp-page="/Group/Author/CreateAuthor" asp-all-route-data="createRoute">
+                <button class="btn btn-outline-success btn-sm" type="button">Create new author</button>
+            </a>
+        </div>
+
+        <partial name="_SearchPartial" model="Model.InputSearchTerm" />
+        <hr/>
+        @{
+            var index = 0;
+            foreach (var author in Model.Authors)
+            {
+                <partial name="_AuthorVmPartial" model="new AuthorVm(author, Model.GroupId, Model.CoverLinkBase)"/>
+
+                if (index < Model.Authors.Count)
+                {
+                    <partial name="Shared/_TopMarginGapPartial"/>
+                }
+
+                index++;
+            }
+
+            <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations"/>
+        }
+
+    </div>
+
+</div>

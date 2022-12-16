@@ -1,0 +1,49 @@
+﻿@page
+@using LibellusWeb.Models
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage"/>
+<div class="row">
+    <div class="col-md-6">
+
+        <div class="mb-3">
+            <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, Model.AvailableProfilePictures)"/>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Username" class="form-control" placeholder="UserName" disabled/>
+            <label asp-for="Username" class="form-label"></label>
+        </div>
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+
+        <div class="mb-3">
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3 input-group">
+                    <label asp-for="Upload" class="input-group-text">Upload</label>
+                    <input id="profupload" class="form-control" type="file" asp-for="Upload" accept="image/*" />
+                    <button class="btn btn-outline-dark" type="button" id="profclear" onclick="resetThing('profupload')">Clear</button>
+                </div>
+                <button id="edit-profile-picture-submit" type="submit" class="w-100 btn btn-lg btn-primary">Change profile picture</button>
+            </form>
+        </div>
+
+        <div class="mb-3">
+            <form asp-page-handler="delete" class="form-floating" id="profile-picture-delete" method="post">
+                <div>
+                    <button id="delte-profile-picture-submit" type="submit" class="mt-2 w-100 btn btn-lg btn-danger">Delete profile picture</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

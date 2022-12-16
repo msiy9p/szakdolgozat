@@ -1,0 +1,45 @@
+﻿@page "/Group/{gid:groupid}/Posts/{size:int=25}/{location:min(1)=1}"
+@using LibellusWeb.ViewModels
+@model LibellusWeb.Pages.Group.Post.PostsModel
+@{
+    ViewData["Title"] = "Posts";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId"/>
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+        @{
+            var createRoute = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+            };
+        }
+        <div class="d-flex justify-content-between">
+            <h2>Posts.</h2><a asp-page="/Group/Post/CreatePost" asp-all-route-data="createRoute"><button class="btn btn-outline-success btn-sm" type="button">Create new post</button></a>
+        </div>
+
+        <partial name="_SearchPartial" model="string.Empty" />
+        <hr/>
+        @{
+            var index = 0;
+            foreach (var post in Model.Posts)
+            {
+                <partial name="_PostVmPartial" model="new PostVm(post, Model.GroupId, post.FriendlyId.Value, Model.LinkBase)"/>
+
+                if (index < Model.Posts.Count)
+                {
+                    <partial name="Shared/_TopMarginGapPartial"/>
+                }
+
+                index++;
+            }
+
+            <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations"/>
+        }
+
+    </div>
+
+</div>

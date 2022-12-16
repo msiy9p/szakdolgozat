@@ -1,0 +1,37 @@
+﻿@page "/Group/{gid:groupid}/Readings/{size:int=25}/{location:min(1)=1}"
+@using LibellusWeb.ViewModels
+@model LibellusWeb.Pages.Group.Reading.ReadingsModel
+@{
+    ViewData["Title"] = "Readings";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-10 align-items-center justify-content-center">
+        <h2>Readings</h2>
+
+        <partial name="Shared/_TopMarginGapPartial" />
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <partial name="_ReadingVmTableRowHeaderPartial"/>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                foreach (var reading in Model.Readings)
+                {
+                    <tr>
+                        <partial name="_ReadingVmTableRowPartial" model="new ReadingVm(reading, Model.GroupId, Model.ProfileLinkBase, false)"/>
+                    </tr>
+                }
+            }
+        </table>
+
+        <partial name="Shared/_PageNavigationPartial" model="Model.PageNavigations" />
+    </div>
+</div>

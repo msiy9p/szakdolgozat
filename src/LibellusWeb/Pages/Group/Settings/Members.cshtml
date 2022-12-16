@@ -1,0 +1,98 @@
+﻿@page "/Group/{gid:groupid}/Settings/Members/{handler?}"
+@using LibellusWeb.Models
+@model LibellusWeb.Pages.Group.Settings.MembersModel
+@{
+    ViewData["Title"] = "Members";
+}
+
+<div class="row d-flex">
+
+    <div class="col-md-2">
+        <partial name="Group/Settings/_SideNavPartial" model="Model.GroupId"/>
+    </div>
+
+    <div class="col-md-6 align-items-center justify-content-center">
+
+        <h2>Owners.</h2>
+        <hr/>
+
+        <div class="container">
+            <ol class="list-group list-group-numbered list-group-flush">
+                @{
+                    foreach (var owner in Model.Owners)
+                    {
+                        <form method="post">
+                            <li class="list-group-item">
+                                <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, owner.AvailableProfilePictures)"/>
+                                <span class="p-1">@owner.UserName</span>
+                                <input type="hidden" asp-for="Input.InputId" value="@owner.UserId.ToString()"/>
+                                <input class="btn btn-danger mb-3" type="submit" value="Demote" asp-page-handler="OwnerDemote"/>
+                            </li>
+                        </form>
+                    }
+                }
+            </ol>
+        </div>
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+
+        <h2>Moderators.</h2>
+        <hr/>
+
+        <div class="container">
+            <ol class="list-group list-group-numbered list-group-flush">
+                @{
+                    foreach (var moderator in Model.Moderators)
+                    {
+                        <form method="post">
+                            <li class="list-group-item">
+                                <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, moderator.AvailableProfilePictures)"/>
+                                <span class="p-1">@moderator.UserName</span>
+                                <input type="hidden" asp-for="Input.InputId" value="@moderator.UserId.ToString()"/>
+                                <input class="btn btn-primary mb-3" type="submit" value="Promote" asp-page-handler="ModeratorPromote"/>
+                                <input class="btn btn-danger mb-3" type="submit" value="Demote" asp-page-handler="ModeratorDemote"/>
+                            </li>
+                        </form>
+                    }
+                }
+            </ol>
+        </div>
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+
+        <h2>Members.</h2>
+        <hr/>
+
+        <div class="container">
+            <ol class="list-group list-group-numbered list-group-flush">
+                @{
+                    foreach (var member in Model.Members)
+                    {
+                        <form method="post">
+                            <li class="list-group-item">
+                                <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, member.AvailableProfilePictures)"/>
+                                <span class="p-1">@member.UserName</span>
+                                <input type="hidden" asp-for="Input.InputId" value="@member.UserId.ToString()"/>
+                                <input class="btn btn-primary mb-3" type="submit" value="Promote" asp-page-handler="MemberPromote"/>
+                                <input class="btn btn-danger mb-3" type="submit" value="Kick" asp-page-handler="MemberKick"/>
+                            </li>
+                        </form>
+                    }
+                }
+            </ol>
+        </div>
+
+        <partial name="Shared/_TopMarginGapPartial"/>
+        <hr />
+        <div class="container">
+            <form method="post">
+                <input class="btn btn-danger mb-3" type="submit" value="Leave group" asp-page-handler="Leave group"/>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

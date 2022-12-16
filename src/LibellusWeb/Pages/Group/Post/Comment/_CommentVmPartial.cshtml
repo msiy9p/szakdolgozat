@@ -1,0 +1,58 @@
+﻿@using LibellusWeb.Models
+@using Libellus.Application.Common.Interfaces.Services
+@using Microsoft.AspNetCore.Html
+@inject IHtmlSanitizer HtmlSanitizer
+@model LibellusWeb.ViewModels.CommentVm
+
+@{
+    var datePrefix = Model.Comment.CreatedOnUtc == Model.Comment.ModifiedOnUtc ?
+        "Created on" :
+        "Modified on";
+
+    var dateProper = Model.Comment.CreatedOnUtc == Model.Comment.ModifiedOnUtc ?
+        Model.Comment.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+        Model.Comment.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+}
+
+<div id="@Model.Comment.FriendlyId.Value" class="card border border-secondary">
+    <div class="card-header container">
+        <div class="row">
+            <div class="col-sm-2 align-self-center">
+                <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, Model.Comment.Creator?.AvailableProfilePictures)"/>
+            </div>
+            @{
+                var commenter = Model.Comment.Creator is not null ? Model.Comment.Creator.UserName : "[deleted]";
+            }
+            <div class="col-sm-auto align-self-center">@commenter</div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        @{
+            var htmlString = new HtmlString(HtmlSanitizer.Sanitize(Model.Comment.Text));
+        }
+        <p class="card-text">@htmlString</p>
+    </div>
+    <div class="card-footer container text-center">
+        <div class="row">
+            <div class="col-sm">
+                <small class="text-muted align-self-center">@datePrefix <span class="datetimerewrite" >@dateProper</span></small>
+            </div>
+            @{
+                if (Model.ShowEdit)
+                {
+                    var commentEdit = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "pid", Model.PostId },
+                        { "cid", Model.Comment.FriendlyId.Value },
+                    };
+
+                    <div class="col-sm">
+                        <a asp-page="/Group/Post/Comment/EditComment" asp-all-route-data="commentEdit" class="btn btn-warning">Edit comment</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

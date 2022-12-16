@@ -1,0 +1,91 @@
+﻿@using LibellusWeb.Models
+@model LibellusWeb.ViewModels.AuthorVm
+
+@{
+    var datePrefix = Model.Author.CreatedOnUtc == Model.Author.ModifiedOnUtc ?
+        "Created on" :
+        "Modified on";
+
+    var dateProper = Model.Author.CreatedOnUtc == Model.Author.ModifiedOnUtc ?
+        Model.Author.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+        Model.Author.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+}
+
+<div class="container">
+    <div class="row row-cols-3 gx-5">
+
+        <div class="col-sm-2">
+            @{
+                var authorView = new Dictionary<string, string>
+                {
+                    { "gid", Model.GroupId },
+                    { "aid", Model.Author.FriendlyId.Value },
+                };
+            }
+            
+            @{
+                if (!Model.ShowEditAuthor && !Model.ShowBackToAuthor)
+                {
+                    <a asp-page="/Group/Author/Author" asp-all-route-data="authorView">
+                        <partial name="Shared/_CoverImagePartial" model="new CoverImage(Model.CoverLinkBase, Model.Author.AvailableCovers, 150)" />
+                    </a>
+                }
+                else
+                {
+                    <partial name="Shared/_CoverImagePartial" model="new CoverImage(Model.CoverLinkBase, Model.Author.AvailableCovers, 150)"/>
+                }
+            }
+        </div>
+        <div class="col-sm-2"></div>
+        <div class="col-sm">
+
+            <div id="@Model.Author.FriendlyId.Value" class="card border border-2 border-secondary">
+                <div class="card-header container">
+                    <h2>@Model.Author.Name</h2>
+                </div>
+                <div class="card-footer container text-center">
+                    <div class="row">
+                        <div class="col-sm-auto">
+                            <small class="text-muted align-self-center">
+                                @datePrefix <span class="datetimerewrite">@dateProper</span>
+                            </small>
+                        </div>
+
+                        @{
+                            if (Model.ShowEditAuthor)
+                            {
+                                var authorEdit = new Dictionary<string, string>
+                                {
+                                    { "gid", Model.GroupId },
+                                    { "aid", Model.Author.FriendlyId.Value },
+                                };
+
+                                <div class="col-sm-auto">
+                                    <a asp-page="/Group/Author/EditAuthor" asp-all-route-data="authorEdit" class="btn btn-warning">Edit author</a>
+                                </div>
+                            }
+                        }
+
+                        @{
+                            if (Model.ShowBackToAuthor)
+                            {
+                                <div class="col-sm-auto">
+                                    <a asp-page="/Group/Author/Author" asp-all-route-data="authorView" class="btn btn-primary">Go back to author</a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                @{
+                    if (!Model.ShowEditAuthor && !Model.ShowBackToAuthor)
+                    {
+                        <a class="stretched-link" asp-page="/Group/Author/Author" asp-all-route-data="authorView"></a>
+                    }
+                }
+            </div>
+
+        </div>
+
+    </div>
+</div>

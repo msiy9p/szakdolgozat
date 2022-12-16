@@ -1,0 +1,91 @@
+﻿@page "/Group/{gid:groupid}/Reading/{rid:readingid}/EditReading/{handler?}"
+@using LibellusWeb.ViewModels
+@using Libellus.Application.Common.Interfaces.Services
+@using Microsoft.AspNetCore.Html
+@inject IHtmlSanitizer HtmlSanitizer
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LibellusWeb.Pages.Group.Reading.EditReadingModel
+@{
+    ViewData["Title"] = "Edit reading";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+        <h2>Edit reading.</h2>
+        <hr />
+
+        <partial name="Group/BookEdition/_BookEditionVmPartial" model="new BookEditionVm(Model.BookEdition, Model.GroupId, Model.CoverLinkBase, true)" />
+
+        <partial name="Shared/_TopMarginGapPartial" />
+        <hr />
+
+        <section>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <form class="form-floating" id="reading" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="date" asp-for="Input.Started" />
+                    <label asp-for="Input.Started">Started on date</label>
+                    <span asp-validation-for="Input.Started" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input class="form-control" type="date" asp-for="Input.Finished" />
+                    <label asp-for="Input.Finished">Finished on date</label>
+                    <span asp-validation-for="Input.Finished" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsReread" class="form-check-label">
+                        <input asp-for="Input.IsReread" class="form-check-input" />
+                        Is reread of this book?
+                    </label>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsDnf" class="form-check-label">
+                        <input asp-for="Input.IsDnf" class="form-check-input" />
+                        DNF?
+                    </label>
+                </div>
+                
+                <div class="form-floating mb-3">
+                    @{
+                        var htmlString = Model.Input.Text is null ? new HtmlString(string.Empty) : new HtmlString(HtmlSanitizer.Sanitize(Model.Input.Text));
+                    }
+                    
+                    <textarea id="Input_Text" name="Input.Text" class="form-control" placeholder="Reading notes" style="height: 200px">@htmlString</textarea>
+
+                    <label asp-for="Input.Text">Reading notes</label>
+                    <span asp-validation-for="Input.Text" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <button id="create-reading-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit reading</button>
+                </div>
+            </form>
+            
+            <form asp-page-handler="delete" class="form-floating" id="reading-delete" method="post">
+
+                <div>
+                    <button id="delte-reading-submit" type="submit" class="mt-2 w-100 btn btn-lg btn-danger">Delete reading</button>
+                </div>
+
+            </form>
+        </section>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+
+    <script src="~/lib/tinymce/tinymce.min.js" asp-append-version="true" referrerpolicy="origin"></script>
+
+    <script type="text/javascript">
+           tinymce.init({
+               selector: 'textarea#Input_Text'
+           });
+    </script>
+}

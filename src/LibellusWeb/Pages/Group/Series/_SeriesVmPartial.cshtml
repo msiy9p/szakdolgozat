@@ -1,0 +1,79 @@
+﻿@model LibellusWeb.ViewModels.SeriesVm
+
+@{
+    var datePrefix = Model.Series.CreatedOnUtc == Model.Series.ModifiedOnUtc ?
+        "Created on" :
+        "Modified on";
+
+    var dateProper = Model.Series.CreatedOnUtc == Model.Series.ModifiedOnUtc ?
+        Model.Series.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+        Model.Series.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+}
+
+<div id="@Model.Series.FriendlyId.Value" class="card border border-2 border-secondary">
+    <div class="card-header container">
+        <h2>@Model.Series.Title</h2>
+    </div>
+
+    <div class="card-footer container text-center">
+        <div class="row">
+            <div class="col-sm-2">
+                @{
+                    var bookCount = Model.Series.BookCount > 1 ?
+                    $"{Model.Series.BookCount} Books" :
+                    $"{Model.Series.BookCount} Book";
+                }
+
+                <small class="text-muted align-self-center">
+                    <img src="~/lib/bootstrap-icons/book.svg" alt="Book icon"/> @bookCount
+                </small>
+            </div>
+            <div class="col-sm-auto">
+                <small class="text-muted align-self-center">@datePrefix <span class="datetimerewrite">@dateProper</span></small>
+            </div>
+            
+            @{
+                if (Model.ShowEditSeries)
+                {
+                    var seriesEdit = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "seid", Model.SeriesId },
+                    };
+
+                    <div class="col-sm-auto">
+                        <a asp-page="/Group/Series/EditSeries" asp-all-route-data="seriesEdit" class="btn btn-warning">Edit series</a>
+                    </div>
+                }
+            }
+
+            @{
+                if (Model.ShowBackToSeries)
+                {
+                    var seriesView = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "seid", Model.SeriesId },
+                    };
+
+                    <div class="col-sm-auto">
+                        <a asp-page="/Group/Series/Series" asp-all-route-data="seriesView" class="btn btn-primary">Go back to series</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    
+    @{
+        if (!Model.ShowEditSeries && !Model.ShowBackToSeries)
+        {
+            var seriesView = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+                { "seid", Model.Series.FriendlyId.Value },
+            };
+
+            <a class="stretched-link" asp-page="/Group/Series/Series" asp-all-route-data="seriesView"></a>
+        }
+    }
+</div>

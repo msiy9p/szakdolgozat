@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<PreserveCompilationContext>true</PreserveCompilationContext>
+	<PreserveCompilationReferences>true</PreserveCompilationReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="EmailTemplates\BookEditionReleasing.liquid" />
+    <None Remove="EmailTemplates\ChangeEmail.liquid" />
+    <None Remove="EmailTemplates\EmailConfirmation.liquid" />
+    <None Remove="EmailTemplates\Invitation.liquid" />
+    <None Remove="EmailTemplates\ResetPassword.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmailTemplates\ResetPassword.liquid" />
+    <EmbeddedResource Include="EmailTemplates\ChangeEmail.liquid" />
+    <EmbeddedResource Include="EmailTemplates\EmailConfirmation.liquid" />
+    <EmbeddedResource Include="EmailTemplates\Invitation.liquid" />
+    <EmbeddedResource Include="EmailTemplates\BookEditionReleasing.liquid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
+    <PackageReference Include="FluentEmail.Core" Version="3.0.2" />
+    <PackageReference Include="FluentEmail.Liquid" Version="3.0.2" />
+    <PackageReference Include="FluentEmail.Smtp" Version="3.0.2" />
+    <PackageReference Include="HtmlSanitizer" Version="8.0.601" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="NodaTime" Version="3.1.6" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libellus.Application\Libellus.Application.csproj" />
+  </ItemGroup>
+
+</Project>

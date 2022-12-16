@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
+    <PackageReference Include="FluentEmail.Core" Version="3.0.2" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="4.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="NodaTime" Version="3.1.6" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libellus.Domain\Libellus.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\Books\DeleteBookCoverImageById\" />
+    <Folder Include="Commands\CoverImages\DeleteCoverImagesById\" />
+    <Folder Include="Commands\CoverImages\CreateCoverImages\" />
+    <Folder Include="Commands\Users\CreateUser\" />
+    <Folder Include="Commands\Users\GenerateUserPasswordResetToken\" />
+    <Folder Include="Commands\Users\ChangeUserEmail\" />
+    <Folder Include="Commands\Users\ConfirmUserEmail\" />
+    <Folder Include="Commands\Users\GenerateUserEmailConfirmationToken\" />
+    <Folder Include="Commands\Users\GenerateUserPasswordResetTokenByEmail\" />
+    <Folder Include="Commands\Users\ForgetTwoFactorClient\" />
+    <Folder Include="Commands\Users\RecoveryCodeSignIn\" />
+    <Folder Include="Commands\Users\TwoFactorSignIn\" />
+    <Folder Include="Commands\Users\PasswordSignIn\" />
+    <Folder Include="Commands\Users\ResetUserPassword\" />
+    <Folder Include="Common\Interfaces\Persistence\Specifications\" />
+    <Folder Include="Common\Security\Requirements\" />
+    <Folder Include="Errors\" />
+    <Folder Include="Queries\GroupMemberships\GetMemberCountById\" />
+    <Folder Include="Queries\Groups\GetMemberGroups\" />
+    <Folder Include="Queries\Readings\GetAllReadingsPaginated\" />
+    <Folder Include="Specifications\" />
+    <Folder Include="Notifications\BookEditionReleasingEvents\" />
+    <Folder Include="Notifications\UserInvitedEvents\" />
+    <Folder Include="Queries\CoverImageMetaData\GetCoverImageMetaDataById\" />
+    <Folder Include="Queries\GroupMemberships\GetGroupMembershipById\" />
+    <Folder Include="Queries\Groups\SearchGroupsPaginated\" />
+    <Folder Include="Queries\Invitations\GetInvitationById\" />
+    <Folder Include="Queries\Invitations\GetInvitationsByGroup\" />
+    <Folder Include="Queries\Users\IsInTwoFactorAuthenticationPhase\" />
+    <Folder Include="Queries\Users\GetUserIdByEmail\" />
+    <Folder Include="Queries\Users\IsTwoFactorTokenValid\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+﻿@using Libellus.Application.Enums
+@model Libellus.Application.Enums.SortOrder
+
+<form asp-page-handler="SortOrder" method="post" id="sortorder" class="d-flex justify-content-end">
+    @{
+        if (Model == SortOrder.Descending)
+        {
+            <button class="btn btn-outline-success" type="submit">Descending <img src="~/lib/bootstrap-icons/caret-down-fill.svg" alt="Descending" /></button>
+        }
+        else
+        {
+            <button class="btn btn-outline-success" type="submit">Ascending <img src="~/lib/bootstrap-icons/caret-up-fill.svg" alt="Ascending" /></button>
+        }
+    }
+</form>

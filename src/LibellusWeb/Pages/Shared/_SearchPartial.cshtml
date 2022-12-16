@@ -1,0 +1,9 @@
+﻿@model string?
+
+<form asp-page-handler="search" method="post" id="searchbar" class="d-flex" role="search">
+    @{
+        var search = Model ?? string.Empty;
+    }
+    <input class="form-control me-2" name="term" value="@search" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>

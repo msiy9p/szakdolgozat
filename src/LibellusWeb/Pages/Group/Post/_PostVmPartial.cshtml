@@ -1,0 +1,149 @@
+﻿@using LibellusWeb.Models
+@using Libellus.Application.Common.Interfaces.Services
+@using Microsoft.AspNetCore.Html
+@inject IHtmlSanitizer HtmlSanitizer
+@model LibellusWeb.ViewModels.PostVm
+
+@{
+    var datePrefix = Model.Post.CreatedOnUtc == Model.Post.ModifiedOnUtc ?
+        "Created on" :
+        "Modified on";
+
+    var dateProper = Model.Post.CreatedOnUtc == Model.Post.ModifiedOnUtc ?
+        Model.Post.CreatedOnUtc.ToDateTimeUtc().ToString("O") :
+        Model.Post.ModifiedOnUtc.ToDateTimeUtc().ToString("O");
+
+    var border = Model.Post.IsMemberOnly ? "border-secondary" : "border-success";
+}
+
+<div id="@Model.Post.FriendlyId.Value" class="card border border-2 @border">
+    <div class="card-header container">
+        <div class="row">
+            <div class="col-sm-2 align-self-center">
+                <partial name="Shared/_ProfilePicturePartial" model="new ProfilePicture(Model.LinkBase, Model.Post.Creator?.AvailableProfilePictures)"/>
+            </div>
+
+            <div class="col-sm-auto align-self-center">
+                <h6>
+                    @{
+                        var userName = Model.Post.Creator is not null ? Model.Post.Creator.UserName : "[deleted]";
+                    }
+                    @userName
+                </h6>
+            </div>
+        </div>
+    </div>
+    <div class="card-header container">
+        <h2>@Model.Post.Title</h2>
+    </div>
+
+    @{
+        if (Model.Post.IsSpoiler || Model.Post.Label is not null)
+        {
+            <ul class="p-2 list-group list-group-flush">
+                <li class="list-group-item">
+                    @{
+                        if (Model.Post.IsSpoiler)
+                        {
+                            <strong class="badge bigger-badge rounded-pill text-bg-danger">Spoiler</strong>
+                        }
+
+                        if (Model.Post.Label is not null)
+                        {
+                            <strong class="badge bigger-badge rounded-pill text-bg-success">@Model.Post.Label.Name</strong>
+                        }
+                    }
+                </li>
+            </ul>
+        }
+    }
+
+    <div class="card-body">
+        @{
+            if (!Model.ShowEditPost && !Model.ShowBackToPost && !Model.ShowCreateComment && Model.Post.IsSpoiler)
+            {
+                <p class="card-text fst-italic">This post has been marked as spoiler. Click to view.</p>
+            }
+            else
+            {
+                var htmlString = new HtmlString(HtmlSanitizer.Sanitize(Model.Post.Text));
+                <p class="card-text">@htmlString</p>
+            }
+        }
+    </div>
+    <div class="card-footer container text-center">
+        <div class="row">
+            <div class="col-sm-2">
+                @{
+                    var commentCount = Model.Post.CommentCount > 1 ?
+                        $"{Model.Post.CommentCount} Comments" :
+                        $"{Model.Post.CommentCount} Comment";
+                }
+
+                <small class="text-muted align-self-center">
+                    <img src="~/lib/bootstrap-icons/chat-right-text.svg" alt="Comment icon"/> @commentCount
+                </small>
+            </div>
+            <div class="col-sm-auto">
+                <small class="text-muted align-self-center">@datePrefix <span class="datetimerewrite">@dateProper</span></small>
+            </div>
+            @{
+                if (!Model.Post.IsLocked && Model.ShowCreateComment)
+                {
+                    var commentCreate = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "pid", Model.PostId },
+                    };
+
+                    <div class="col-sm-auto">
+                        <a asp-page="/Group/Post/Comment/CreateComment" asp-all-route-data="commentCreate" class="btn btn-primary">Create comment</a>
+                    </div>
+                }
+            }
+
+            @{
+                if (!Model.Post.IsLocked && Model.ShowEditPost)
+                {
+                    var postEdit = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "pid", Model.PostId },
+                    };
+
+                    <div class="col-sm-auto">
+                        <a asp-page="/Group/Post/EditPost" asp-all-route-data="postEdit" class="btn btn-warning">Edit post</a>
+                    </div>
+                }
+            }
+
+            @{
+                if (Model.ShowBackToPost)
+                {
+                    var commentCreate = new Dictionary<string, string>
+                    {
+                        { "gid", Model.GroupId },
+                        { "pid", Model.PostId },
+                    };
+
+                    <div class="col-sm-auto">
+                        <a asp-page="/Group/Post/Comment/Comments" asp-all-route-data="commentCreate" class="btn btn-primary">Go back to post</a>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    
+    @{
+        if (!Model.ShowEditPost && !Model.ShowBackToPost && !Model.ShowCreateComment)
+        {
+            var postView = new Dictionary<string, string>
+            {
+                { "gid", Model.GroupId },
+                { "pid", Model.Post.FriendlyId.Value },
+            };
+
+            <a class="stretched-link" asp-page="/Group/Post/Comment/Comments" asp-all-route-data="postView"></a>
+        }
+    }
+</div>

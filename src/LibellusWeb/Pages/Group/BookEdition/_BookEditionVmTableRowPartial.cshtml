@@ -1,0 +1,52 @@
+﻿@using LibellusWeb.Models
+@model LibellusWeb.ViewModels.BookEditionVm
+
+@{
+    var bookEditionView = new Dictionary<string, string>
+    {
+        { "gid", Model.GroupId },
+        { "beid", Model.BookEdition.FriendlyId.Value },
+    };
+
+
+    <td>
+        <a asp-page="/Group/BookEdition/BookEdition" asp-all-route-data="bookEditionView">
+            <partial name="Shared/_CoverImagePartial" model="new CoverImage(Model.CoverLinkBase, Model.BookEdition.AvailableCovers)" />
+        </a>
+    </td>
+    <td>
+        <a asp-page="/Group/BookEdition/BookEdition" asp-all-route-data="bookEditionView">@Model.BookEdition.Title</a>
+    </td>
+    <td>
+        @{
+            foreach (var author in Model.BookEdition.Book.Authors)
+            {
+                var authorView = new Dictionary<string, string>
+                {
+                    { "gid", Model.GroupId },
+                    { "aid", author.AuthorFriendlyId.Value },
+                };
+                <a asp-page="/Group/Author/Author" asp-all-route-data="authorView">
+                    <span class="badge p-1 big-badge rounded-pill text-bg-primary text-wrap">@author.Name.Value</span>
+                </a>
+            }
+        }
+    </td>
+    <td>@Model.BookEdition.Publisher?.Name.Value</td>
+    <td>@Model.BookEdition.PublishedOn?.ToString()</td>
+    <td>@Model.BookEdition.Format?.Name.Value</td>
+    <td>@Model.BookEdition.Language?.Name.Value</td>
+    <td>
+        @{
+            if (Model.BookEdition.IsTranslation)
+            {
+                <small class="text-muted align-self-center">
+                    <img src="~/lib/bootstrap-icons/check-circle-fill.svg" alt="Is translation"/>
+                </small>
+            }
+        }
+    </td>
+    <td>@Model.BookEdition.Isbn?.ToString()</td>
+    <td>@Model.BookEdition.PageCount?.Value</td>
+    <td>@Model.BookEdition.WordCount?.Value</td>
+}

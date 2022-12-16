@@ -1,0 +1,52 @@
+﻿@page "/Group/{gid:groupid}/Settings/{handler?}"
+@model LibellusWeb.Pages.Group.Settings.SettingsModel
+@{
+    ViewData["Title"] = "Group Settings";
+}
+
+<div class="row d-flex">
+    
+    <div class="col-md-2">
+        <partial name="Group/Settings/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-6 align-items-center justify-content-center">
+
+        <h2>Group settings.</h2>
+        <hr/>
+
+        <section>
+            <form class="form-floating" id="group" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input readonly disabled asp-for="@Model.Name" type="text" class="form-control" placeholder="Group name">
+                    <label asp-for="@Model.Name">Group name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea asp-for="Input.Description" class="form-control" placeholder="Write the description here." style="height: 200px"></textarea>
+                    <label asp-for="Input.Description">Description (Optional)</label>
+                    <span asp-validation-for="Input.Description" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsPrivate" class="form-check-label">
+                        <input asp-for="Input.IsPrivate" class="form-check-input" checked/>
+                        Is private group?
+                    </label>
+                </div>
+
+                <div>
+                    <button id="edit-group-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit group</button>
+                </div>
+            </form>
+            <form asp-page-handler="delete" class="form-floating" id="group-delete" method="post">
+                <div>
+                    <button id="delte-group-submit" type="submit" class="mt-2 w-100 btn btn-lg btn-danger">Delete group</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

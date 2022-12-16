@@ -1,0 +1,58 @@
+﻿@page "/Group/{gid:groupid}/Post/{pid:postid}/LockPost/{handler?}"
+@using LibellusWeb.ViewModels
+@model LibellusWeb.Pages.Group.Post.LockPostModel
+@{
+    ViewData["Title"] = "Lock post";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-6 align-items-center justify-content-center">
+        <h2>Lock post.</h2>
+        <hr/>
+        <section>
+            <partial name="_PostVmPartial" model="new PostVm(Model.Post, Model.GroupId, Model.PostId, Model.LinkBase, false, false, true)"/>
+
+            <partial name="Shared/_TopMarginGapPartial"/>
+
+            @{
+                if (!Model.Post.IsLocked)
+                {
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <form class="form-floating" id="post" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                        <div class="form-floating mb-3">
+                            <textarea id="Input_Text" name="Input.Text" class="form-control" placeholder="Lock reason" style="height: 200px"></textarea>
+                            <label asp-for="Input.Text">Lock reason</label>
+                            <span asp-validation-for="Input.Text" class="text-danger"></span>
+                        </div>
+
+                        <div>
+                            <button id="lock-post-submit" type="submit" class="w-100 btn btn-lg btn-warning">Lock post</button>
+                        </div>
+
+                    </form>
+                }
+                else
+                {
+                    <form asp-page-handler="unlock" class="form-floating" id="post-unlock" method="post">
+
+                        <div>
+                            <button id="unlock-post-submit" type="submit" class="mt-2 w-100 btn btn-lg btn-warning">Unlock post</button>
+                        </div>
+
+                    </form>
+                }
+            }
+
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

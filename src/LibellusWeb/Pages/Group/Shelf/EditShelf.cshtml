@@ -1,0 +1,118 @@
+﻿@page "/Group/{gid:groupid}/Shelf/{shid:shelfid}/EditShelf/{handler?}"
+@model LibellusWeb.Pages.Group.Shelf.EditShelfModel
+@{
+    ViewData["Title"] = "Edit shelf";
+}
+
+<div class="row d-flex">
+    <div class="col-md-2">
+        <partial name="Group/_SideNavPartial" model="Model.GroupId" />
+    </div>
+
+    <div class="col-md-8 align-items-center justify-content-center">
+        <section>
+            <h2>Create a new shelf.</h2>
+            <hr />
+
+            <form class="form-floating" id="shelf" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input readonly disabled type="text" class="form-control" placeholder="Shelf name" value="@Model.ShelfName">
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea asp-for="Input.Description" class="form-control" placeholder="Description text" style="height: 200px"></textarea>
+                    <label asp-for="Input.Description">Description (Optional)</label>
+                    <span asp-validation-for="Input.Description" class="text-danger"></span>
+                </div>
+                
+                <div class="form-check mb-3">
+                    <label asp-for="Input.IsLocked" class="form-check-label">
+                        <input asp-for="Input.IsLocked" class="form-check-input" />
+                        Is locked from other users?
+                    </label>
+                </div>
+                
+                <div>
+                    <button id="create-shelf-submit" type="submit" class="w-100 btn btn-lg btn-primary">Edit shelf</button>
+                </div>
+            </form>
+
+            <form asp-page-handler="delete" class="form-floating" id="shelf-delete" method="post">
+
+                <div>
+                    <button id="delte-shelf-submit" type="submit" class="mt-2 w-100 btn btn-lg btn-danger">Delete shelf</button>
+                </div>
+
+            </form>
+            <hr />
+            
+            <partial name="Shared/_TopMarginGapPartial"/>
+            
+            <div class="container">
+                <h4>Books.</h4>
+
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Authors</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @{
+                        var index = 1;
+                        foreach (var book in Model.Books)
+                        {
+                            <tr>
+                                <form method="post" asp-page-handler="DeleteBook">
+                                    <td>
+                                        @index
+                                    </td>
+                                    <td>
+                                        @{
+                                            var bookView = new Dictionary<string, string>
+                                            {
+                                                { "gid", Model.GroupId },
+                                                { "bid", book.BookFriendlyId.Value },
+                                            };
+                                        }
+
+                                        <a asp-page="/Group/Book/Book" asp-all-route-data="bookView">@book.Title</a>
+                                    </td>
+                                    <td>
+                                        @{
+                                            foreach (var author in book.Authors)
+                                            {
+                                                var authorView = new Dictionary<string, string>
+                                                {
+                                                    { "gid", Model.GroupId },
+                                                    { "aid", author.AuthorFriendlyId.Value },
+                                                };
+                                                <a asp-page="/Group/Author/Author" asp-all-route-data="authorView">
+                                                    <span class="badge p-1 big-badge rounded-pill text-bg-primary text-wrap">@author.Name.Value</span>
+                                                </a>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="inputBookId" value="@book.BookFriendlyId.Value" />
+                                        <input class="btn btn-danger mb-3" type="submit" value="Remove"/>
+                                    </td>
+                                </form>
+                            </tr>
+
+                            index++;
+                        }
+                    }
+                </table>
+            </div>
+
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

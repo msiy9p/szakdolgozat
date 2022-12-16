@@ -1,0 +1,45 @@
+﻿@inject ClaimsPrincipalExtractor ClaimsPrincipalExtractor
+@inject IIdentityService IdentityService
+@inject ICurrentGroupService CurrentGroupService
+@using LibellusWeb.Services
+@using Libellus.Application.Common.Interfaces.Services
+@using Libellus.Application.Common.Security
+@model string
+
+@{
+    var routeParam = new Dictionary<string, string>
+    {
+        { "gid", Model },
+    };
+}
+
+<nav class="nav nav-pills flex-column">
+    <a class="nav-link @ManageNavPages.PostsNavClass(ViewContext)" id="Posts" asp-page="/Group/Post/Posts" asp-all-route-data="routeParam">Posts</a>
+    <a class="nav-link @ManageNavPages.ShelvesNavClass(ViewContext)" id="Shelves" asp-page="/Group/Shelf/Shelves" asp-all-route-data="routeParam">Shelves</a>
+    <a class="nav-link @ManageNavPages.BooksNavClass(ViewContext)" id="Books" asp-page="/Group/Book/Books" asp-all-route-data="routeParam">Books</a>
+    <a class="nav-link @ManageNavPages.BookEditionsNavClass(ViewContext)" id="Book editions" asp-page="/Group/BookEdition/BookEditions" asp-all-route-data="routeParam">Book editions</a>
+    <a class="nav-link @ManageNavPages.AuthorsNavClass(ViewContext)" id="Authors" asp-page="/Group/Author/Authors" asp-all-route-data="routeParam">Authors</a>
+    <a class="nav-link @ManageNavPages.SeriesNavClass(ViewContext)" id="Series" asp-page="/Group/Series/Serieses" asp-all-route-data="routeParam">Series</a>
+    <a class="nav-link @ManageNavPages.ReadingsNavClass(ViewContext)" id="Readings" asp-page="/Group/Reading/Readings" asp-all-route-data="routeParam">Readings</a>
+    @{
+        var user = ClaimsPrincipalExtractor.GetUserId(User);
+        if (user.IsSuccess)
+        {
+            var group = CurrentGroupService.CurrentGroupId;
+            if (group.HasValue)
+            {
+                var result = await IdentityService.IsInGroupAsync(user.Value, group.Value);
+                if (result.IsSuccess && result.Value)
+                {
+                    var result1 = await IdentityService.IsInGroupRoleAsync(user.Value, group.Value, SecurityConstants.GroupRoles.Member);
+                    if (result1.IsSuccess && !result1.Value)
+                    {
+                        <a class="nav-link @ManageNavPages.SettingsNavClass(ViewContext)" id="Settings" asp-page="/Group/Settings/Settings" asp-all-route-data="routeParam">Settings</a>
+                    }
+                }
+            }
+
+            
+        }
+    }
+</nav>
